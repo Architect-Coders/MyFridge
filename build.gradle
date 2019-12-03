@@ -38,4 +38,5 @@ task clean(type: Delete) {
 
 ext{
     lifecycle_version = '2.1.0'
+    room_version = '2.2.2'
 }
