@@ -13,7 +13,7 @@
             tools:ignore="GoogleAppIndexingWarning"
             android:fullBackupContent="true">
         <activity
-                android:name=".ui.main.MainActivity"
+                android:name=".ui.productList.ProductListActivity"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
