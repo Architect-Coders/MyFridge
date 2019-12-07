@@ -1,11 +1,12 @@
-package com.pabji.myfridge.ui.extensions
+package com.pabji.myfridge.presentation.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.pabji.myfridge.domain.dtos.ProductDTO
-import com.pabji.myfridge.ui.productList.Product
+import com.pabji.myfridge.presentation.models.Product
 
-internal fun ProductDTO.toProduct() = Product(name)
+internal fun ProductDTO.toProduct() =
+    Product(name)
 internal fun List<ProductDTO>.toProductList() = map { it.toProduct() }
 internal fun LiveData<List<ProductDTO>>.toProductListLiveData() =
     Transformations.map(this) { it.toProductList() }
