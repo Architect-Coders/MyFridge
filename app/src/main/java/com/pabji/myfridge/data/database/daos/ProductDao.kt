@@ -1,5 +1,6 @@
 package com.pabji.myfridge.data.database.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -9,7 +10,7 @@ import com.pabji.myfridge.data.database.entities.ProductEntity
 interface ProductDao {
 
     @Query("SELECT * FROM products")
-    suspend fun getAll(): List<ProductEntity>
+    fun getAll(): LiveData<List<ProductEntity>>
 
     @Insert
     fun insertAll(list: List<ProductEntity>)

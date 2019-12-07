@@ -3,6 +3,7 @@ package com.pabji.myfridge.ui.productList
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.pabji.myfridge.R
 import com.pabji.myfridge.data.datasources.ProductDBDatasource
 import com.pabji.myfridge.ui.extensions.getViewModel
@@ -20,16 +21,20 @@ class ProductListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         viewModel = getViewModel { ProductListViewModel(ProductDBDatasource(application)) }
-        viewModel.viewState.observe(this, Observer(::updateUI))
+        viewModel.productList.observe(this, Observer(::updateProductList))
 
-        rv_product_list.adapter = adapter
+
+        rv_product_list.let {
+            it.adapter = adapter
+            it.layoutManager = LinearLayoutManager(this)
+        }
 
         fab.setOnClickListener { viewModel.onFabClicked() }
     }
 
-    private fun updateUI(viewState: MainViewState?) {
-        when (viewState) {
-            is MyProductList -> adapter.productList = viewState.productList
+    private fun updateProductList(productList: List<Product>?) {
+        productList?.run {
+            adapter.productList = this
         }
     }
 }
