@@ -11,7 +11,7 @@ import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.getViewModel
 import com.pabji.myfridge.data.datasources.ProductDBDatasource
 import com.pabji.myfridge.presentation.models.Product
-import kotlinx.android.synthetic.main.fragment_product_list.*
+import kotlinx.android.synthetic.main.fragment_product_list.view.*
 
 class ProductListFragment : BaseFragment() {
 
@@ -19,15 +19,12 @@ class ProductListFragment : BaseFragment() {
     private val adapter = ProductListAdapter()
 
     companion object {
-        val TAG = "$this"
         fun newInstance() = ProductListFragment()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        activity?.run {
-            viewModel = getViewModel { ProductListViewModel(ProductDBDatasource(application)) }
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = getViewModel { ProductListViewModel(ProductDBDatasource(app)) }
     }
 
     override fun onCreateView(
@@ -35,16 +32,17 @@ class ProductListFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_product_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_product_list, container, false)
+        view.rv_product_list.let {
+            it.adapter = adapter
+            it.layoutManager = LinearLayoutManager(context)
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.productList.observe(this, Observer(::updateProductList))
-        rv_product_list.let {
-            it.adapter = adapter
-            it.layoutManager = LinearLayoutManager(context)
-        }
     }
 
     private fun updateProductList(productList: List<Product>?) {
