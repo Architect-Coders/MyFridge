@@ -1,4 +1,4 @@
-package com.pabji.myfridge.ui.productList
+package com.pabji.myfridge.presentation.ui.productList
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.notifyChanges
+import com.pabji.myfridge.presentation.models.Product
 import kotlinx.android.synthetic.main.item_product_list.view.*
 import kotlin.properties.Delegates
 
