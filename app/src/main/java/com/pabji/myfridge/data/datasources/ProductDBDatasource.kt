@@ -20,4 +20,7 @@ class ProductDBDatasource(application: Application) : ProductRepository {
 
     override suspend fun insert(product: ProductDTO) =
         withContext(Dispatchers.IO) { productDao.insert(product.toProductEntity()) }
+
+    override suspend fun remove(product: ProductDTO) =
+        withContext(Dispatchers.IO) { productDao.remove(product.toProductEntity()) }
 }

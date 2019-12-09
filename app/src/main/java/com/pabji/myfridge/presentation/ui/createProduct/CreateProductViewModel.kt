@@ -20,15 +20,15 @@ class CreateProductViewModel(private val productRepository: ProductRepository) :
     var name = ""
 
     fun onProductNameChanged(productName: String) {
-        name = productName
         launch {
+            name = productName
             _productValidated.value = checkProductValid(productName)
         }
     }
 
     fun onFabClick() {
         launch {
-            productRepository.insert(ProductDTO(name))
+            productRepository.insert(ProductDTO(name = name))
             _viewState.value = Finish
         }
     }
