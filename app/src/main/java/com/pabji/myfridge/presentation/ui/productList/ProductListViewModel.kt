@@ -6,9 +6,9 @@ import androidx.navigation.Navigation
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.BaseViewModel
 import com.pabji.myfridge.domain.repositories.ProductRepository
+import com.pabji.myfridge.presentation.extensions.toProductDTO
+import com.pabji.myfridge.presentation.extensions.toProductListLiveData
 import com.pabji.myfridge.presentation.models.Product
-import com.pabji.myfridge.presentation.utils.toProductDTO
-import com.pabji.myfridge.presentation.utils.toProductListLiveData
 import kotlinx.coroutines.launch
 
 class ProductListViewModel(private val productRepository: ProductRepository) : BaseViewModel() {
