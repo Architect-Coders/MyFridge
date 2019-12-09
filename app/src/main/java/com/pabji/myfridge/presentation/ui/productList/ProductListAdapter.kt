@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pabji.myfridge.R
-import com.pabji.myfridge.common.notifyChanges
+import com.pabji.myfridge.common.extensions.notifyChanges
 import com.pabji.myfridge.presentation.models.Product
 import kotlinx.android.synthetic.main.item_product_list.view.*
 import kotlin.properties.Delegates

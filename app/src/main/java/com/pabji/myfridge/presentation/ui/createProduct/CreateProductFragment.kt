@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.BaseFragment
-import com.pabji.myfridge.common.getViewModel
-import com.pabji.myfridge.common.setOnTextChange
-import com.pabji.myfridge.common.showKeyboard
+import com.pabji.myfridge.common.extensions.getViewModel
+import com.pabji.myfridge.common.extensions.setOnTextChange
+import com.pabji.myfridge.common.extensions.showKeyboard
 import com.pabji.myfridge.data.datasources.ProductDBDatasource
 import kotlinx.android.synthetic.main.fragment_create_product.*
 

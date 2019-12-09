@@ -21,6 +21,4 @@ interface ProductDao {
 
     @Delete
     fun remove(product: ProductEntity)
-    /*@Query("DELETE FROM products WHERE id = :productId")
-    fun removeById(productId: Long)*/
 }
