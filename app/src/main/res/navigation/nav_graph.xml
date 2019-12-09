@@ -7,7 +7,7 @@
 
     <fragment
             android:id="@+id/productListFragment"
-            android:name="com.pabji.myfridge.presentation.ui.productList.ProductListFragment"
+            android:name="com.pabji.myfridge.presentation.ui.searchProducts.SearchProductsFragment"
             android:label="fragment_product_list"
             tools:layout="@layout/fragment_product_list">
         <action
