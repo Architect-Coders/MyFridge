@@ -13,6 +13,10 @@ class CreateProductViewModel(private val productRepository: ProductRepository) :
 
     private val _productValidated = MutableLiveData<Boolean>()
     val productValidated: LiveData<Boolean> = _productValidated
+
+    private val _viewState = MutableLiveData<CreateProductViewState>()
+    val viewState: LiveData<CreateProductViewState> = _viewState
+
     var name = ""
 
     fun onProductNameChanged(productName: String) {
@@ -25,6 +29,7 @@ class CreateProductViewModel(private val productRepository: ProductRepository) :
     fun onFabClick() {
         launch {
             productRepository.insert(ProductDTO(name))
+            _viewState.value = Finish
         }
     }
 
