@@ -32,10 +32,9 @@ class CreateProductFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.viewState.observe(this, Observer { updateUI(it) })
-
         setFabView()
         setProductNameView()
+        viewModel.viewState.observe(this, Observer { updateUI(it) })
     }
 
     private fun setProductNameView() {

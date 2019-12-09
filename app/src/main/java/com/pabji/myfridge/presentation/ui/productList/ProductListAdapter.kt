@@ -11,7 +11,8 @@ import kotlinx.android.synthetic.main.item_product_list.view.*
 import kotlin.properties.Delegates
 
 
-class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ProductViewHolder>() {
+class ProductListAdapter(private val onProductClicked: (Product) -> Unit) :
+    RecyclerView.Adapter<ProductListAdapter.ProductViewHolder>() {
 
     var productList: List<Product> by Delegates.observable(emptyList()) { _, oldList, newList ->
         notifyChanges(oldList, newList) { o, n -> o.name == n.name }
@@ -19,7 +20,7 @@ class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ProductViewHo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val v: View = LayoutInflater.from(parent.context).inflate(R.layout.item_product_list, parent, false)
-        return ProductViewHolder(v)
+        return ProductViewHolder(v, onProductClicked)
     }
 
     override fun getItemCount() = productList.size
@@ -28,10 +29,14 @@ class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ProductViewHo
         holder.bind(productList[position])
     }
 
-    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ProductViewHolder(view: View, private val onProductClicked: (Product) -> Unit) :
+        RecyclerView.ViewHolder(view) {
 
         fun bind(product: Product) {
-            itemView.tv_product_name.text = product.name
+            itemView.run {
+                tv_product_name.text = product.name
+                setOnClickListener { onProductClicked(product) }
+            }
         }
     }
 }
