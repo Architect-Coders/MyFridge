@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.productList
+package com.pabji.myfridge.presentation.ui.searchProducts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,22 +9,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.extensions.getViewModel
-import com.pabji.myfridge.data.datasources.ProductDBDatasource
+import com.pabji.myfridge.data.datasources.SearchDatasource
 import com.pabji.myfridge.presentation.models.Product
+import com.pabji.myfridge.presentation.ui.productList.ProductListAdapter
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
-class ProductListFragment : BaseFragment() {
+class SearchProductsFragment : BaseFragment() {
 
     private lateinit var adapter: ProductListAdapter
-    private lateinit var viewModel: ProductListViewModel
+    private lateinit var viewModel: SearchProductsViewModel
 
     companion object {
-        fun newInstance() = ProductListFragment()
+        fun newInstance() = SearchProductsFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = getViewModel { ProductListViewModel(ProductDBDatasource(app)) }
+        viewModel = getViewModel { SearchProductsViewModel(SearchDatasource()) }
     }
 
     override fun onCreateView(
@@ -32,25 +33,18 @@ class ProductListFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_product_list, container, false)
+        return inflater.inflate(R.layout.fragment_search_products, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setFabView()
         setProductListView()
         viewModel.productList.observe(this, Observer(::updateProductList))
     }
 
-    private fun setFabView() {
-        fab.run {
-            setOnClickListener { viewModel.onFabClick(this) }
-        }
-    }
-
     private fun setProductListView() {
         rv_product_list.let {
-            adapter = ProductListAdapter { product -> viewModel.onProductClicked(product) }
+            adapter = ProductListAdapter { product -> viewModel.onProductClicked() }
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(context)
         }
