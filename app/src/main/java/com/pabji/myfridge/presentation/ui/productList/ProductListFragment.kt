@@ -11,10 +11,12 @@ import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.getViewModel
 import com.pabji.myfridge.data.datasources.ProductDBDatasource
 import com.pabji.myfridge.presentation.models.Product
+import com.pabji.myfridge.presentation.ui.main.MainViewModel
 import kotlinx.android.synthetic.main.fragment_product_list.view.*
 
 class ProductListFragment : BaseFragment() {
 
+    private lateinit var activityViewmodel: MainViewModel
     private lateinit var viewModel: ProductListViewModel
     private val adapter = ProductListAdapter()
 
@@ -36,6 +38,9 @@ class ProductListFragment : BaseFragment() {
         view.rv_product_list.let {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(context)
+        }
+        view.fab.run {
+            setOnClickListener { viewModel.onFabClick(this) }
         }
         return view
     }

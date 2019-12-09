@@ -1,5 +1,8 @@
 package com.pabji.myfridge.common
 
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import androidx.annotation.IntegerRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -27,6 +30,18 @@ fun <T> RecyclerView.Adapter<*>.notifyChanges(
         override fun getNewListSize() = newList.size
     })
     diff.dispatchUpdatesTo(this)
+}
+
+fun EditText.setOnTextChange(onTextChanged: (String) -> Unit) {
+    addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(p0: Editable?) {}
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            onTextChanged(p0?.toString() ?: "")
+        }
+    })
 }
 
 @Suppress("UNCHECKED_CAST")

@@ -3,6 +3,7 @@ package com.pabji.myfridge.data.datasources
 import android.app.Application
 import com.pabji.myfridge.data.database.MyDatabase
 import com.pabji.myfridge.data.extensions.toProductDTOListLiveData
+import com.pabji.myfridge.data.extensions.toProductEntity
 import com.pabji.myfridge.data.extensions.toProductEntityList
 import com.pabji.myfridge.domain.dtos.ProductDTO
 import com.pabji.myfridge.domain.repositories.ProductRepository
@@ -13,7 +14,10 @@ class ProductDBDatasource(application: Application) : ProductRepository {
 
     private val productDao = MyDatabase(application).productDao()
 
-    override fun getAllProducts() = productDao.getAll().toProductDTOListLiveData()
+    override fun getAll() = productDao.getAll().toProductDTOListLiveData()
     override suspend fun insertAll(productList: List<ProductDTO>) =
         withContext(Dispatchers.IO) { productDao.insertAll(productList.toProductEntityList()) }
+
+    override suspend fun insert(product: ProductDTO) =
+        withContext(Dispatchers.IO) { productDao.insert(product.toProductEntity()) }
 }

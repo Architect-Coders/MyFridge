@@ -14,4 +14,7 @@ interface ProductDao {
 
     @Insert
     fun insertAll(list: List<ProductEntity>)
+
+    @Insert
+    fun insert(product: ProductEntity)
 }
