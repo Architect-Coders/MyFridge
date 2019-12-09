@@ -2,6 +2,7 @@ package com.pabji.myfridge.data.database.daos
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.pabji.myfridge.data.database.entities.ProductEntity
@@ -14,4 +15,10 @@ interface ProductDao {
 
     @Insert
     fun insertAll(list: List<ProductEntity>)
+
+    @Insert
+    fun insert(product: ProductEntity)
+
+    @Delete
+    fun remove(product: ProductEntity)
 }

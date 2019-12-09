@@ -5,6 +5,8 @@ import com.pabji.myfridge.domain.dtos.ProductDTO
 
 interface ProductRepository {
 
-    fun getAllProducts(): LiveData<List<ProductDTO>>
+    fun getAll(): LiveData<List<ProductDTO>>
     suspend fun insertAll(productList: List<ProductDTO>)
+    suspend fun insert(product: ProductDTO)
+    suspend fun remove(product: ProductDTO)
 }
