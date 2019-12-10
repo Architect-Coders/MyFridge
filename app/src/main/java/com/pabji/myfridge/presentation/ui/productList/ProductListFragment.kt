@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.features.searchProducts
+package com.pabji.myfridge.presentation.ui.productList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,23 +9,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.extensions.getViewModel
-import com.pabji.myfridge.data.datasources.SearchDatasource
-import com.pabji.myfridge.presentation.features.productList.ProductListAdapter
+import com.pabji.myfridge.data.datasources.ProductDBDatasource
 import com.pabji.myfridge.presentation.models.Product
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
-class SearchProductsFragment : BaseFragment() {
+class ProductListFragment : BaseFragment() {
 
     private lateinit var adapter: ProductListAdapter
-    private lateinit var viewModel: SearchProductsViewModel
+    private lateinit var viewModel: ProductListViewModel
 
     companion object {
-        fun newInstance() = SearchProductsFragment()
+        fun newInstance() = ProductListFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = getViewModel { SearchProductsViewModel(SearchDatasource()) }
+        viewModel = getViewModel { ProductListViewModel(ProductDBDatasource(app)) }
     }
 
     override fun onCreateView(
@@ -33,7 +32,7 @@ class SearchProductsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_search_products, container, false)
+        return inflater.inflate(R.layout.fragment_product_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,7 +43,7 @@ class SearchProductsFragment : BaseFragment() {
 
     private fun setProductListView() {
         rv_product_list.let {
-            adapter = ProductListAdapter { product -> viewModel.onProductClicked() }
+            adapter = ProductListAdapter { product -> viewModel.onProductClicked(product) }
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(context)
         }

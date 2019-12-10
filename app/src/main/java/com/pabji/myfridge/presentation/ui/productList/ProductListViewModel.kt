@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.features.productList
+package com.pabji.myfridge.presentation.ui.productList
 
 import androidx.lifecycle.LiveData
 import com.pabji.myfridge.common.BaseViewModel

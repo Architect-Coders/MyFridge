@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.features.createProduct
+package com.pabji.myfridge.presentation.ui.createProduct
 
 sealed class CreateProductViewState
 object Finish : CreateProductViewState()

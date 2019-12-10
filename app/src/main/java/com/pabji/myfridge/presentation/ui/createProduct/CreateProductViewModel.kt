@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.features.createProduct
+package com.pabji.myfridge.presentation.ui.createProduct
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
