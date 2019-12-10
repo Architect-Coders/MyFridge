@@ -18,5 +18,3 @@ internal fun List<ProductDTO>.toProductEntityList() = map { it.toProductEntity()
 internal fun SearchResponse.toProductDTOList() = products.fromResponseToProductDTOList()
 internal fun List<ProductResponse>.fromResponseToProductDTOList() = map { it.toProductDTO() }
 internal fun ProductResponse.toProductDTO() = ProductDTO(name = productName)
-
-

@@ -37,15 +37,8 @@ class ProductListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setFabView()
         setProductListView()
         viewModel.productList.observe(this, Observer(::updateProductList))
-    }
-
-    private fun setFabView() {
-        fab.run {
-            setOnClickListener { viewModel.onFabClick(this) }
-        }
     }
 
     private fun setProductListView() {
