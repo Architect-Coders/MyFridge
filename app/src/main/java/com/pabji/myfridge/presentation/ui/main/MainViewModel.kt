@@ -1,5 +1,13 @@
 package com.pabji.myfridge.presentation.ui.main
 
 import com.pabji.myfridge.common.BaseViewModel
+import kotlinx.coroutines.launch
 
-class MainViewModel : BaseViewModel()
+class MainViewModel : BaseViewModel() {
+
+    var navigator: MainNavigator? = null
+
+    fun onFabClick() {
+        launch { navigator?.goToCreateProduct() }
+    }
+}
