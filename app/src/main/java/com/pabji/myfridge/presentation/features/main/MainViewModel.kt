@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.main
+package com.pabji.myfridge.presentation.features.main
 
 import com.pabji.myfridge.common.BaseViewModel
 import kotlinx.coroutines.launch

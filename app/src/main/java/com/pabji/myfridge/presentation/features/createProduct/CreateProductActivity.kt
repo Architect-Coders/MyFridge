@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.createProduct
+package com.pabji.myfridge.presentation.features.createProduct
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

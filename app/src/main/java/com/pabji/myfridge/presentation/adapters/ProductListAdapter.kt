@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.productList
+package com.pabji.myfridge.presentation.features.productList
 
 import android.view.LayoutInflater
 import android.view.View

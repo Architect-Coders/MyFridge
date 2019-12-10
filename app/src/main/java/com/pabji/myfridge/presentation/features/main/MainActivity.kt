@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.main
+package com.pabji.myfridge.presentation.features.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,8 +6,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.extensions.getViewModel
 import com.pabji.myfridge.presentation.adapters.MainViewPagerAdapter
-import com.pabji.myfridge.presentation.ui.productList.ProductListFragment
-import com.pabji.myfridge.presentation.ui.searchProducts.SearchProductsFragment
+import com.pabji.myfridge.presentation.features.productList.ProductListFragment
+import com.pabji.myfridge.presentation.features.searchProducts.SearchProductsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
