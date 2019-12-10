@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.features.searchProducts
+package com.pabji.myfridge.presentation.ui.searchProducts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
