@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.extensions.getViewModel
+import com.pabji.myfridge.data.datasources.ProductDBDatasource
 import com.pabji.myfridge.data.datasources.SearchDatasource
 import com.pabji.myfridge.presentation.models.Product
 import com.pabji.myfridge.presentation.ui.productList.ProductListAdapter
@@ -25,7 +26,8 @@ class SearchProductsFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = getViewModel { SearchProductsViewModel(SearchDatasource()) }
+        viewModel =
+            getViewModel { SearchProductsViewModel(SearchDatasource(), ProductDBDatasource(app)) }
     }
 
     override fun onCreateView(
@@ -39,12 +41,23 @@ class SearchProductsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setProductListView()
-        viewModel.productList.observe(this, Observer(::updateProductList))
+        viewModel.productList.observe(this, Observer(::updateUI))
+    }
+
+    private fun updateUI(viewState: SearchProductsViewState?) {
+        when (viewState) {
+            is SearchResult -> updateProductList(viewState.productList)
+            else -> showSearchError()
+        }
+    }
+
+    private fun showSearchError() {
+
     }
 
     private fun setProductListView() {
         rv_product_list.let {
-            adapter = ProductListAdapter { product -> viewModel.onProductClicked() }
+            adapter = ProductListAdapter { product -> viewModel.onProductClicked(product) }
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(context)
         }
