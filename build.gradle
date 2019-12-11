@@ -7,7 +7,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
@@ -42,4 +42,5 @@ ext{
     room_version = '2.2.2'
     retrofit_version = '2.6.0'
     viewpager_version = '1.0.0'
+    arrow_version = '0.10.3'
 }
