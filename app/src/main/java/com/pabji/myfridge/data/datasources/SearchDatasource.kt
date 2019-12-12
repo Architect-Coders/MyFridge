@@ -1,8 +1,9 @@
 package com.pabji.myfridge.data.datasources
 
 import arrow.core.Either
-import arrow.core.getOrElse
-import arrow.core.toOption
+import arrow.core.extensions.either.applicativeError.applicativeError
+import arrow.core.extensions.either.bifunctor.bimap
+import arrow.integrations.retrofit.adapter.unwrapBody
 import com.pabji.myfridge.data.extensions.toProductDTOList
 import com.pabji.myfridge.data.network.ApiClient
 import com.pabji.myfridge.data.network.ApiService
@@ -16,12 +17,8 @@ class SearchDatasource : SearchRepository {
     private var client: ApiService = ApiClient.createService()
     override suspend fun searchProductsByName(searchTerm: String, page: Int) =
         withContext(Dispatchers.IO) {
-            client.searchProductsByName(searchTerm, page).run {
-                if (isSuccessful) {
-                    Either.right(body()?.toProductDTOList().toOption().getOrElse { emptyList() })
-                } else {
-                    Either.left(SearchError)
-                }
-            }
+            client.searchProductsByName(searchTerm, page)
+                .unwrapBody(Either.applicativeError())
+                .bimap({ SearchError }, { it.toProductDTOList() })
         }
 }
