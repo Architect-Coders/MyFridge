@@ -2,6 +2,9 @@ package com.pabji.myfridge.presentation.ui.createProduct
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.toOption
 import com.pabji.myfridge.common.BaseViewModel
 import com.pabji.myfridge.domain.dtos.ProductDTO
 import com.pabji.myfridge.domain.repositories.ProductRepository
@@ -17,11 +20,11 @@ class CreateProductViewModel(private val productRepository: ProductRepository) :
     private val _viewState = MutableLiveData<CreateProductViewState>()
     val viewState: LiveData<CreateProductViewState> = _viewState
 
-    var name = ""
+    var name: Option<String> = None
 
     fun onProductNameChanged(productName: String) {
         launch {
-            name = productName
+            name = productName.toOption()
             _productValidated.value = checkProductValid(productName)
         }
     }

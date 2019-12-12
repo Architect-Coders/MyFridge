@@ -1,3 +1,5 @@
 package com.pabji.myfridge.presentation.models
 
-data class Product(val id: Long? = null, val name: String)
+import arrow.core.Option
+
+data class Product(val id: Option<Long>, val name: String = "", val previewUrl: String = "")
