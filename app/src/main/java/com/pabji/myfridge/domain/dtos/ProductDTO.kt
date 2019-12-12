@@ -1,3 +1,10 @@
 package com.pabji.myfridge.domain.dtos
 
-data class ProductDTO(val id: Long? = null, val name: String)
+import arrow.core.None
+import arrow.core.Option
+
+data class ProductDTO(
+    val id: Option<Long> = None,
+    val name: Option<String> = None,
+    val previewUrl: Option<String> = None
+)
