@@ -1,5 +1,6 @@
 package com.pabji.myfridge.data.network
 
+import arrow.integrations.retrofit.adapter.CallKindAdapterFactory
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,6 +21,7 @@ object ApiClient {
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .addCallAdapterFactory(CallKindAdapterFactory.create())
             .build().create(ApiService::class.java)
     }
 }

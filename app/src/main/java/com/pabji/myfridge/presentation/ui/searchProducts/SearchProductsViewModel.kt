@@ -15,8 +15,8 @@ class SearchProductsViewModel(
     private val productRepository: ProductRepository
 ) : BaseViewModel() {
 
-    private val _productList = MutableLiveData<SearchProductsViewState>()
-    val productList: LiveData<SearchProductsViewState> = _productList
+    private val _productList = MutableLiveData<List<Product>>()
+    val productList: LiveData<List<Product>> = _productList
 
     init {
         getProductList()
@@ -25,10 +25,8 @@ class SearchProductsViewModel(
     private fun getProductList() {
         val tempString = "yogur griego"
         launch {
-            _productList.value = searchRepository.searchProductsByName(tempString).fold({
-                SearchError
-            }) {
-                SearchResult(it.toProductList())
+            searchRepository.searchProductsByName(tempString).fold(::onErrorResult) {
+                _productList.value = it.toProductList()
             }
         }
     }

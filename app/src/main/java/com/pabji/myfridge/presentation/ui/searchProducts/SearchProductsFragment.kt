@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pabji.myfridge.R
@@ -11,6 +12,8 @@ import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.extensions.getViewModel
 import com.pabji.myfridge.data.datasources.ProductDBDatasource
 import com.pabji.myfridge.data.datasources.SearchDatasource
+import com.pabji.myfridge.domain.errors.DomainError
+import com.pabji.myfridge.domain.errors.SearchError
 import com.pabji.myfridge.presentation.models.Product
 import com.pabji.myfridge.presentation.ui.productList.ProductListAdapter
 import kotlinx.android.synthetic.main.fragment_product_list.*
@@ -41,31 +44,33 @@ class SearchProductsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setProductListView()
-        viewModel.productList.observe(this, Observer(::updateUI))
-    }
-
-    private fun updateUI(viewState: SearchProductsViewState?) {
-        when (viewState) {
-            is SearchResult -> updateProductList(viewState.productList)
-            else -> showSearchError()
+        viewModel.let {
+            it.productList.observe(this, Observer(::updateProductList))
+            it.errorState.observe(this, Observer(::onErrorState))
         }
-    }
-
-    private fun showSearchError() {
-
     }
 
     private fun setProductListView() {
         rv_product_list.let {
-            adapter = ProductListAdapter { product -> viewModel.onProductClicked(product) }
-            it.adapter = adapter
+            it.adapter =
+                ProductListAdapter { product -> viewModel.onProductClicked(product) }.apply {
+                    adapter = this
+                }
             it.layoutManager = LinearLayoutManager(context)
         }
     }
 
-    private fun updateProductList(productList: List<Product>?) {
-        productList?.run {
-            adapter.productList = this
+    private fun updateProductList(productList: List<Product>) {
+        adapter.productList = productList
+    }
+
+    private fun onErrorState(domainError: DomainError?) {
+        when (domainError) {
+            is SearchError -> showSearchError()
         }
+    }
+
+    private fun showSearchError() {
+        Toast.makeText(context, R.string.search_error_message, Toast.LENGTH_SHORT).show()
     }
 }
