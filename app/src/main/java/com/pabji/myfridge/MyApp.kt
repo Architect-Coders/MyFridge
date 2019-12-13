@@ -14,7 +14,7 @@ class MyApp : Application() {
         app = this
         db = Room.databaseBuilder(
                 this,
-                ProductDatabase::class.java, "myFridge.db"
+            ProductDatabase::class.java, "products.db"
         ).build()
     }
 

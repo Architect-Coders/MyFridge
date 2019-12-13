@@ -23,9 +23,8 @@ class SearchProductsViewModel(
     }
 
     private fun getProductList() {
-        val tempString = "yogur griego"
         launch {
-            searchRepository.searchProductsByName(tempString).fold(::onErrorResult) {
+            searchRepository.getRandomProducts().fold(::onErrorResult) {
                 _productList.value = it.toProductList()
             }
         }
@@ -34,6 +33,14 @@ class SearchProductsViewModel(
     fun onProductClicked(product: Product) {
         launch {
             productRepository.insert(product.toProductDTO())
+        }
+    }
+
+    fun onSearch(searchTerm: String) {
+        launch {
+            searchRepository.searchProductsByName(searchTerm).fold(::onErrorResult) {
+                _productList.value = it.toProductList()
+            }
         }
     }
 

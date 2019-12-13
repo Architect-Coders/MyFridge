@@ -12,11 +12,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        const val PRODUCT_LIST_POSITION = 0
-        const val SEARCH_POSITION = 1
-    }
-
     lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +22,12 @@ class MainActivity : AppCompatActivity() {
         viewModel = getViewModel { MainViewModel() }.also {
             it.navigator = MainNavigator(this)
         }
+        setViewPager()
+        setBottomNavigation()
+        setFab()
+    }
+
+    private fun setViewPager() {
         vp_container.let {
             it.orientation = ViewPager2.ORIENTATION_HORIZONTAL
             it.adapter = MainViewPagerAdapter(
@@ -42,6 +43,9 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    private fun setBottomNavigation() {
         bottom_navigation.let {
             it.setOnNavigationItemSelectedListener { item ->
                 vp_container.currentItem = when (item.itemId) {
@@ -51,14 +55,25 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
+    }
 
+    private fun setFab() {
         fab.setOnClickListener { viewModel.onFabClick() }
     }
 
     private fun onPagePositionSelected(position: Int) {
         when (position) {
-            PRODUCT_LIST_POSITION -> fab.show()
-            SEARCH_POSITION -> fab.hide()
+            PRODUCT_LIST_POSITION -> {
+                fab.show()
+            }
+            SEARCH_POSITION -> {
+                fab.hide()
+            }
         }
+    }
+
+    companion object {
+        const val PRODUCT_LIST_POSITION = 0
+        const val SEARCH_POSITION = 1
     }
 }
