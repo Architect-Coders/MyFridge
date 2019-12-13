@@ -3,6 +3,7 @@ package com.pabji.myfridge.presentation.ui.createProduct
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.pabji.myfridge.MyApp
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.extensions.getViewModel
 import com.pabji.myfridge.common.extensions.setOnTextChange
@@ -19,7 +20,7 @@ class CreateProductActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_product)
         setSupportActionBar(toolbar)
 
-        viewModel = getViewModel { CreateProductViewModel(ProductDBDatasource(application)) }.also {
+        viewModel = getViewModel { CreateProductViewModel(ProductDBDatasource(MyApp.app)) }.also {
             it.viewState.observe(this, Observer(::updateUI))
         }
         setFabView()
