@@ -9,9 +9,12 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("cgi/search.pl?search_simple=1&json=1&action=process&fields=product_name,image_small_url,quantity")
-    suspend fun searchProductsByName(@Query("search_terms") name: String, @Query("page") page: Int): Response<SearchResponse>
+    @GET("cgi/search.pl?search_simple=1&json=1&action=process")
+    suspend fun searchProductsByName(@Query("search_terms") name: String, @Query("page") page: Int, @Query("fields") fields: String): Response<SearchResponse>
 
-    @GET("api/v0/product/{id}.json?fields=product_name,image_small_url,quantity,code,stores,countries,image_nutrition_url,generic_name,ingredients_text,image_ingredients_url,categories")
-    suspend fun getProductDetailById(@Path("id") id: String): Response<ProductResponse>
+    @GET("api/v0/product/{id}.json")
+    suspend fun getProductDetailById(@Path("id") id: String, @Query("fields") fields: String): Response<ProductResponse>
+
+    @GET("api/v0/product/{barcode}.json")
+    suspend fun getProductDetailByBarcode(@Path("barcode") barcode: String, @Query("fields") fields: String): Response<ProductResponse>
 }

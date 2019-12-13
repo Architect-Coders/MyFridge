@@ -11,7 +11,7 @@ import com.pabji.myfridge.R
 import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.extensions.getViewModel
 import com.pabji.myfridge.data.datasources.ProductDBDatasource
-import com.pabji.myfridge.data.datasources.SearchDatasource
+import com.pabji.myfridge.data.datasources.ProductNetworkDatasource
 import com.pabji.myfridge.domain.errors.DomainError
 import com.pabji.myfridge.domain.errors.SearchError
 import com.pabji.myfridge.presentation.models.Product
@@ -30,7 +30,7 @@ class SearchProductsFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel =
-            getViewModel { SearchProductsViewModel(SearchDatasource(), ProductDBDatasource(app)) }
+                getViewModel { SearchProductsViewModel(ProductNetworkDatasource(), ProductDBDatasource(app)) }
     }
 
     override fun onCreateView(

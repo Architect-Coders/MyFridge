@@ -1,4 +1,4 @@
-package com.pabji.myfridge.data.extensions
+package com.pabji.myfridge.data.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations

@@ -1,17 +1,18 @@
 package com.pabji.myfridge.data.network.responses
 
 import com.google.gson.annotations.SerializedName
+import com.pabji.myfridge.data.network.*
 
 data class ProductResponse(
-    @SerializedName("product_name") val productName: String?,
-    @SerializedName("image_small_url") val previewUrl: String?,
-    @SerializedName("quantity") val quantity: String?,
-    @SerializedName("code") val barcode: String?,
-    @SerializedName("stores") val stores: String?,
-    @SerializedName("countries") val countries: String?,
-    @SerializedName("image_nutrition_url") val imageNutritionUrl: String?,
-    @SerializedName("generic_name") val genericName: String?,
-    @SerializedName("ingredients_text") val ingredientsText: String?,
-    @SerializedName("image_ingredients_url") val ingredientsUrl: String?,
-    @SerializedName("categories") val categories: String?
+        @SerializedName(PRODUCT_NAME) val productName: String?,
+        @SerializedName(IMAGE_SMALL_URL) val previewUrl: String?,
+        @SerializedName(QUANTITY) val quantity: String?,
+        @SerializedName(CODE) val barcode: String?,
+        @SerializedName(STORES) val stores: String?,
+        @SerializedName(COUNTRIES) val countries: String?,
+        @SerializedName(IMAGE_NUTRITION_URL) val imageNutritionUrl: String?,
+        @SerializedName(GENERIC_NAME) val genericName: String?,
+        @SerializedName(INGREDIENTS_TEXT) val ingredientsText: String?,
+        @SerializedName(IMAGE_INGREDIENTS_URL) val ingredientsUrl: String?,
+        @SerializedName(CATEGORIES) val categories: String?
 )
