@@ -17,6 +17,11 @@ import retrofit2.Response
 class ProductNetworkDatasource : SearchRepository {
 
     private var client: ApiService = ApiClient.createService()
+
+    override suspend fun getRandomProducts() =
+        getHTTPResponse(client.searchProductsByName(fields = SIMPLE_FIELDS))
+            .bimap({ SearchError }, { it.toProductDTOList() })
+
     override suspend fun searchProductsByName(searchTerm: String, page: Int) =
             getHTTPResponse(client.searchProductsByName(searchTerm, page, SIMPLE_FIELDS))
                     .bimap({ SearchError }, { it.toProductDTOList() })
