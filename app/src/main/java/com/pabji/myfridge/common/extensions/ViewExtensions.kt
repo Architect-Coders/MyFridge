@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.EditText
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
@@ -40,7 +41,7 @@ fun EditText.setOnTextChange(onTextChanged: (String) -> Unit) {
     })
 }
 
-/*fun SearchView.onTextChange(result: (String) -> Unit){
+fun SearchView.onTextChange(result: (String) -> Unit) {
     setOnQueryTextListener(object : SearchView.OnQueryTextListener{
         override fun onQueryTextSubmit(query: String?): Boolean {
             return false
@@ -52,8 +53,10 @@ fun EditText.setOnTextChange(onTextChanged: (String) -> Unit) {
         }
 
     })
-}*/
+}
 
 fun <T : View> T?.visible(): T? = this?.apply { visibility = VISIBLE }
 fun <T : View> T?.gone(): T? = this?.apply { visibility = GONE }
+
+fun <T : View> T?.setVisible(isVisible: Boolean) = if (isVisible) visible() else gone()
 
