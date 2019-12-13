@@ -14,4 +14,3 @@ internal fun LiveData<List<ProductDTO>>.toProductListLiveData() =
     Transformations.map(this) { it.toProductList() }
 
 internal fun Product.toProductDTO() = ProductDTO(id, name.toOption(), previewUrl.toOption())
-internal fun List<Product>.toProductDTOList() = map { it.toProductDTO() }
