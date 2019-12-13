@@ -5,8 +5,6 @@ import com.pabji.myfridge.domain.dtos.ProductDTO
 import com.pabji.myfridge.domain.errors.DomainError
 
 interface SearchRepository {
-    suspend fun searchProductsByName(
-        searchTerm: String,
-        page: Int = 1
-    ): Either<DomainError, List<ProductDTO>>
+    suspend fun searchProductsByName(searchTerm: String, page: Int = 1): Either<DomainError, List<ProductDTO>>
+    suspend fun getProductDetail(productId: String): Either<DomainError, ProductDTO>
 }
