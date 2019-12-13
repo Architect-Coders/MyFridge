@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.extensions.notifyChanges
 import com.pabji.myfridge.presentation.models.Product
@@ -35,6 +36,10 @@ class ProductListAdapter(private val onProductClicked: (Product) -> Unit) :
         fun bind(product: Product) {
             itemView.run {
                 tv_product_name.text = product.name
+                iv_product_picture.load(product.previewUrl) {
+                    crossfade(true)
+                    error(R.mipmap.ic_launcher)
+                }
                 setOnClickListener { onProductClicked(product) }
             }
         }
