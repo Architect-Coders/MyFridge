@@ -5,4 +5,5 @@
     <string name="my_fridge">My fridge</string>
     <string name="search">Search</string>
     <string name="search_error_message">Se ha producido un error en la búsqueda</string>
+    <string name="search_products">Buscar productos</string>
 </resources>
