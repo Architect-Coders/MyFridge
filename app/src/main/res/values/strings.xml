@@ -7,4 +7,8 @@
     <string name="search_error_message">Se ha producido un error en la búsqueda</string>
     <string name="search_products">Buscar productos</string>
     <string name="item_picture">Item Picture</string>
+    <string name="ingredients">Ingredientes</string>
+    <string name="nutritions">Valores nutricionales</string>
+    <string name="categories">Categorías</string>
+    <string name="product_image">Product Image</string>
 </resources>

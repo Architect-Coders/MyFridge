@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.searchProducts
+package com.pabji.myfridge.presentation.fragments.searchProducts
 
 import android.app.SearchManager
 import android.content.Context
@@ -18,10 +18,11 @@ import com.pabji.myfridge.data.datasources.ProductDBDatasource
 import com.pabji.myfridge.data.datasources.ProductNetworkDatasource
 import com.pabji.myfridge.domain.errors.DomainError
 import com.pabji.myfridge.domain.errors.SearchError
+import com.pabji.myfridge.presentation.adapters.ProductListAdapter
+import com.pabji.myfridge.presentation.fragments.main.MainFragmentDirections
 import com.pabji.myfridge.presentation.models.Product
-import com.pabji.myfridge.presentation.ui.productList.ProductListAdapter
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_search_products.*
+import kotlinx.android.synthetic.main.fragment_main.view.*
+import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class SearchProductsFragment : BaseFragment() {
 
@@ -73,7 +74,6 @@ class SearchProductsFragment : BaseFragment() {
                 setSearchableInfo(searchManager.getSearchableInfo(componentName))
                 setOnQueryTextFocusChangeListener { _, isVisible ->
                     bottom_navigation.setVisible(!isVisible)
-                    vp_container.isUserInputEnabled = !isVisible
                 }
                 instanceState?.run {
                     getCharSequence(SEARCH_TERM)?.let {
@@ -98,7 +98,11 @@ class SearchProductsFragment : BaseFragment() {
     private fun setProductListView() {
         rv_product_list.let {
             it.adapter =
-                ProductListAdapter { product -> viewModel.onProductClicked(product) }.apply {
+                ProductListAdapter { product ->
+                    MainFragmentDirections.actionMainFragmentToProductDetailFragment(product).run {
+                        navController.navigate(this)
+                    }
+                }.apply {
                     adapter = this
                 }
             it.layoutManager = LinearLayoutManager(context)

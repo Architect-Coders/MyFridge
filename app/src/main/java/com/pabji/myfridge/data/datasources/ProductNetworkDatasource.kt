@@ -19,15 +19,21 @@ class ProductNetworkDatasource : SearchRepository {
     private var client: ApiService = ApiClient.createService()
 
     override suspend fun getRandomProducts() =
-        getHTTPResponse(client.searchProductsByName(fields = SIMPLE_FIELDS))
+        getHTTPResponse(client.searchProductsByName(fields = SIMPLE_FIELDS.joinToString(",")))
             .bimap({ SearchError }, { it.toProductDTOList() })
 
     override suspend fun searchProductsByName(searchTerm: String, page: Int) =
-            getHTTPResponse(client.searchProductsByName(searchTerm, page, SIMPLE_FIELDS))
+        getHTTPResponse(
+            client.searchProductsByName(
+                searchTerm,
+                page,
+                SIMPLE_FIELDS.joinToString(",")
+            )
+        )
                     .bimap({ SearchError }, { it.toProductDTOList() })
 
     override suspend fun getProductDetail(productId: String) =
-            getHTTPResponse(client.getProductDetailById(productId, DETAIL_FIELDS))
+        getHTTPResponse(client.getProductDetailById(productId, DETAIL_FIELDS.joinToString(",")))
                     .bimap({ DetailError }, { it.toProductDTO() })
 
 
@@ -35,7 +41,18 @@ class ProductNetworkDatasource : SearchRepository {
             withContext(Dispatchers.IO) { response.unwrapBody(Either.applicativeError()) }
 
     companion object {
-        const val SIMPLE_FIELDS: String = "$PRODUCT_NAME,$IMAGE_SMALL_URL,$QUANTITY"
-        const val DETAIL_FIELDS: String = "$PRODUCT_NAME,$IMAGE_SMALL_URL,$QUANTITY,$CODE,$STORES,$COUNTRIES,$IMAGE_NUTRITION_URL,$GENERIC_NAME,$INGREDIENTS_TEXT,$IMAGE_INGREDIENTS_URL,$CATEGORIES"
+        val SIMPLE_FIELDS = listOf(PRODUCT_NAME, IMAGE_SMALL_URL, QUANTITY)
+        val DETAIL_FIELDS = listOf(
+            SIMPLE_FIELDS,
+            CODE,
+            STORES,
+            COUNTRIES,
+            IMAGE_NUTRITION_URL,
+            GENERIC_NAME,
+            INGREDIENTS_TEXT,
+            IMAGE_INGREDIENTS_URL,
+            CATEGORIES,
+            BRANDS
+        )
     }
 }

@@ -1,5 +1,7 @@
 package com.pabji.myfridge.presentation.models
 
-import arrow.core.Option
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-data class Product(val id: Option<Long>, val name: String = "", val previewUrl: String = "")
+@Parcelize
+data class Product(val id: Long?, val name: String = "", val previewUrl: String = "") : Parcelable

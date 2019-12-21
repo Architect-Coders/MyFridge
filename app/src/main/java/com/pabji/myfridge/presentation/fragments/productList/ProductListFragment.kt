@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.productList
+package com.pabji.myfridge.presentation.fragments.productList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,8 @@ import com.pabji.myfridge.R
 import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.extensions.getViewModel
 import com.pabji.myfridge.data.datasources.ProductDBDatasource
+import com.pabji.myfridge.presentation.adapters.ProductListAdapter
+import com.pabji.myfridge.presentation.fragments.main.MainFragmentDirections
 import com.pabji.myfridge.presentation.models.Product
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
@@ -17,10 +19,6 @@ class ProductListFragment : BaseFragment() {
 
     private lateinit var adapter: ProductListAdapter
     private lateinit var viewModel: ProductListViewModel
-
-    companion object {
-        fun newInstance() = ProductListFragment()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +41,11 @@ class ProductListFragment : BaseFragment() {
 
     private fun setProductListView() {
         rv_product_list.let {
-            adapter = ProductListAdapter { product -> viewModel.onProductClicked(product) }
+            adapter = ProductListAdapter { product ->
+                MainFragmentDirections.actionMainFragmentToProductDetailFragment(product).run {
+                    navController.navigate(this)
+                }
+            }
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(context)
         }
@@ -53,5 +55,9 @@ class ProductListFragment : BaseFragment() {
         productList?.run {
             adapter.productList = this
         }
+    }
+
+    companion object {
+        fun newInstance() = ProductListFragment()
     }
 }
