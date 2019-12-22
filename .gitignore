@@ -1,41 +1,59 @@
-# Windows thumbnail db
-Thumbs.db
-
-# OSX files
-.DS_Store
-
 # built application files
 *.apk
 *.ap_
 
 # files for the dex VM
 *.dex
-  
+
+# Git files
+*.orig
+
 # Java class files
 *.class
-  
+
 # generated files
 bin/
-gen/
 build/
-  
+build-cache/
+gen/
+cobertura-results/
+contiperf-report/
+test_database
+test_database-journal
+doc/
+schemas/
+#test
+cobertura.ser
+
 # Local configuration file (sdk path, etc)
 local.properties
-  
+
 # Eclipse project files
 .classpath
 .project
-  
-# Android Studio
+.checkstyle
+.settings
+.externalToolBuilders
+
+# IDEA files
 .idea
-.gradle
-/*/local.properties
-/*/out
-/*/*/build
-build
-/*/*/production
 *.iml
-*.iws
-*.ipr
-*~
-*.swp
+
+# Allow test projects Eclipse files (java configuration)
+!*Tests/.classpath
+!*Tests/.project
+
+#Mac Stuff
+.DS_Store
+
+#GAG
+.gag
+
+#Gradle directory
+.gradle
+
+#tmp directory
+tmp/
+
+# Android Studio layout inspection captures
+captures/
