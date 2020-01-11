@@ -1,18 +1,21 @@
-package com.pabji.myfridge.presentation.fragments.productList
+package com.pabji.myfridge.presentation.ui.productList
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.extensions.getViewModel
-import com.pabji.myfridge.data.datasources.ProductDBDatasource
+import com.pabji.myfridge.common.extensions.startActivity
+import com.pabji.myfridge.data.datasources.ProductDBDatasourceImpl
+import com.pabji.myfridge.data.datasources.ProductNetworkDatasourceImpl
+import com.pabji.myfridge.data.repository.ProductRepositoryImpl
 import com.pabji.myfridge.presentation.adapters.ProductListAdapter
-import com.pabji.myfridge.presentation.fragments.main.MainFragmentDirections
 import com.pabji.myfridge.presentation.models.Product
+import com.pabji.myfridge.presentation.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : BaseFragment() {
@@ -22,7 +25,14 @@ class ProductListFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = getViewModel { ProductListViewModel(ProductDBDatasource(app)) }
+        viewModel = getViewModel {
+            ProductListViewModel(
+                ProductRepositoryImpl(
+                    ProductDBDatasourceImpl(app),
+                    ProductNetworkDatasourceImpl()
+                )
+            )
+        }
     }
 
     override fun onCreateView(
@@ -41,20 +51,18 @@ class ProductListFragment : BaseFragment() {
 
     private fun setProductListView() {
         rv_product_list.let {
-            adapter = ProductListAdapter { product ->
-                MainFragmentDirections.actionMainFragmentToProductDetailFragment(product).run {
-                    navController.navigate(this)
+            adapter = ProductListAdapter(ProductListAdapter.RecyclerType.GRID) { product ->
+                startActivity<ProductDetailActivity> {
+                    putExtra(ProductDetailActivity.INTENT_PRODUCT, product)
                 }
             }
             it.adapter = adapter
-            it.layoutManager = LinearLayoutManager(context)
+            it.layoutManager = GridLayoutManager(context, 3)
         }
     }
 
-    private fun updateProductList(productList: List<Product>?) {
-        productList?.run {
-            adapter.productList = this
-        }
+    private fun updateProductList(productList: List<Product>) {
+        adapter.productList = productList
     }
 
     companion object {

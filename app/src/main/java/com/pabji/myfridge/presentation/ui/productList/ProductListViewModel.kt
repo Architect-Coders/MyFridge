@@ -1,8 +1,8 @@
-package com.pabji.myfridge.presentation.fragments.productList
+package com.pabji.myfridge.presentation.ui.productList
 
 import androidx.lifecycle.LiveData
 import com.pabji.myfridge.common.BaseViewModel
-import com.pabji.myfridge.domain.repositories.ProductRepository
+import com.pabji.myfridge.data.repository.ProductRepository
 import com.pabji.myfridge.presentation.extensions.toProductListLiveData
 import com.pabji.myfridge.presentation.models.Product
 

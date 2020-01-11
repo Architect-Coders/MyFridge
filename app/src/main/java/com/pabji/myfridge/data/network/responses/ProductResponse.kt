@@ -6,6 +6,7 @@ import com.pabji.myfridge.data.network.*
 data class ProductResponse(
     @SerializedName(PRODUCT_NAME) val productName: String?,
     @SerializedName(IMAGE_SMALL_URL) val previewUrl: String?,
+    @SerializedName(IMAGE_FRONT_URL) val imageUrl: String?,
     @SerializedName(QUANTITY) val quantity: String?,
     @SerializedName(CODE) val barcode: String?,
     @SerializedName(STORES) val stores: String?,

@@ -1,29 +1,23 @@
-package com.pabji.myfridge.presentation.fragments.main
+package com.pabji.myfridge.presentation.ui.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.pabji.myfridge.R
-import com.pabji.myfridge.common.BaseFragment
+import com.pabji.myfridge.common.extensions.startActivity
 import com.pabji.myfridge.presentation.adapters.MainViewPagerAdapter
-import com.pabji.myfridge.presentation.fragments.productList.ProductListFragment
-import com.pabji.myfridge.presentation.fragments.searchProducts.SearchProductsFragment
-import kotlinx.android.synthetic.main.fragment_main.*
+import com.pabji.myfridge.presentation.ui.createProduct.CreateProductActivity
+import com.pabji.myfridge.presentation.ui.productList.ProductListFragment
+import com.pabji.myfridge.presentation.ui.searchProducts.SearchProductsFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainFragment : BaseFragment() {
+class MainActivity : AppCompatActivity() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         setViewPager()
         setBottomNavigation()
         setFab()
@@ -33,7 +27,7 @@ class MainFragment : BaseFragment() {
         vp_container.run {
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             offscreenPageLimit = 2
-            adapter = MainViewPagerAdapter(childFragmentManager, lifecycle).apply {
+            adapter = MainViewPagerAdapter(supportFragmentManager, lifecycle).apply {
                 list = listOf(
                     ProductListFragment.newInstance(),
                     SearchProductsFragment.newInstance()
@@ -61,21 +55,13 @@ class MainFragment : BaseFragment() {
     }
 
     private fun setFab() {
-        fab.setOnClickListener {
-            MainFragmentDirections.actionMainFragmentToCreateProductFragment().run {
-                navController.navigate(this)
-            }
-        }
+        fab.setOnClickListener { startActivity<CreateProductActivity> {} }
     }
 
     private fun onPagePositionSelected(position: Int) {
         when (position) {
-            PRODUCT_LIST_POSITION -> {
-                fab.show()
-            }
-            SEARCH_POSITION -> {
-                fab.hide()
-            }
+            PRODUCT_LIST_POSITION -> fab.show()
+            SEARCH_POSITION -> fab.hide()
         }
     }
 
