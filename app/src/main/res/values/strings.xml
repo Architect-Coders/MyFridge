@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">MyFridge</string>
     <string name="action_settings">Settings</string>
+    <string name="product_name">Product Name</string>
+    <string name="my_fridge">My fridge</string>
+    <string name="search">Search</string>
+    <string name="search_error_message">Se ha producido un error en la búsqueda</string>
+    <string name="detail_error_message">Se ha producido un error al obtener los datos</string>
+    <string name="search_products">Buscar productos</string>
+    <string name="item_picture">Item Picture</string>
+    <string name="ingredients">Ingredientes</string>
+    <string name="nutritions">Valores nutricionales</string>
+    <string name="categories">Categorías</string>
+    <string name="product_image">Product Image</string>
+    <string name="stores">Tiendas</string>
+    <string name="add_to_the_fridge">Add to the fridge</string>
+    <string name="create_product_title">Crear producto</string>
+    <string name="product_detail_title">Detalle</string>
 </resources>
