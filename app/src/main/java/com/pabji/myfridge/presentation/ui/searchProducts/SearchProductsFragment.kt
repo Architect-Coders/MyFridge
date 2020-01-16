@@ -14,12 +14,15 @@ import com.pabji.myfridge.common.BaseFragment
 import com.pabji.myfridge.common.extensions.getViewModel
 import com.pabji.myfridge.common.extensions.onTextChange
 import com.pabji.myfridge.common.extensions.setVisible
-import com.pabji.myfridge.data.datasources.ProductDBDatasource
-import com.pabji.myfridge.data.datasources.ProductNetworkDatasource
+import com.pabji.myfridge.common.extensions.startActivity
+import com.pabji.myfridge.data.datasources.ProductDBDatasourceImpl
+import com.pabji.myfridge.data.datasources.ProductNetworkDatasourceImpl
+import com.pabji.myfridge.data.repository.ProductRepositoryImpl
 import com.pabji.myfridge.domain.errors.DomainError
 import com.pabji.myfridge.domain.errors.SearchError
+import com.pabji.myfridge.presentation.adapters.ProductListAdapter
 import com.pabji.myfridge.presentation.models.Product
-import com.pabji.myfridge.presentation.ui.productList.ProductListAdapter
+import com.pabji.myfridge.presentation.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_products.*
 
@@ -34,8 +37,10 @@ class SearchProductsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         viewModel = getViewModel {
             SearchProductsViewModel(
-                ProductNetworkDatasource(),
-                ProductDBDatasource(app)
+                ProductRepositoryImpl(
+                    ProductDBDatasourceImpl(app),
+                    ProductNetworkDatasourceImpl()
+                )
             )
         }
         setHasOptionsMenu(true)
@@ -52,10 +57,7 @@ class SearchProductsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setProductListView()
-        viewModel.let {
-            it.productList.observe(this, Observer(::updateProductList))
-            it.errorState.observe(this, Observer(::onErrorState))
-        }
+        viewModel.viewState.observe(this, Observer(::updateUI))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -73,7 +75,6 @@ class SearchProductsFragment : BaseFragment() {
                 setSearchableInfo(searchManager.getSearchableInfo(componentName))
                 setOnQueryTextFocusChangeListener { _, isVisible ->
                     bottom_navigation.setVisible(!isVisible)
-                    vp_container.isUserInputEnabled = !isVisible
                 }
                 instanceState?.run {
                     getCharSequence(SEARCH_TERM)?.let {
@@ -98,19 +99,33 @@ class SearchProductsFragment : BaseFragment() {
     private fun setProductListView() {
         rv_product_list.let {
             it.adapter =
-                ProductListAdapter { product -> viewModel.onProductClicked(product) }.apply {
+                ProductListAdapter { product ->
+                    startActivity<ProductDetailActivity> {
+                        putExtra(ProductDetailActivity.INTENT_PRODUCT, product)
+                    }
+                }.apply {
                     adapter = this
                 }
             it.layoutManager = LinearLayoutManager(context)
         }
     }
 
-    private fun updateProductList(productList: List<Product>) {
-        adapter.productList = productList
+    private fun updateUI(viewState: SearchProductsViewState?) {
+        when (viewState) {
+            Loading -> progress_bar.show()
+            is ShowProductList -> showProductList(viewState.list)
+            is ShowError -> showError(viewState.error)
+        }
     }
 
-    private fun onErrorState(domainError: DomainError?) {
-        when (domainError) {
+    private fun showProductList(list: List<Product>) {
+        progress_bar.hide()
+        adapter.productList = list
+    }
+
+    private fun showError(error: DomainError) {
+        progress_bar.hide()
+        when (error) {
             is SearchError -> showSearchError()
         }
     }

@@ -10,6 +10,15 @@ interface ProductDao {
     @Query("SELECT * FROM products")
     fun getAll(): LiveData<List<ProductEntity>>
 
+    @Query("SELECT * FROM products WHERE id = :productId")
+    fun getProductById(productId: Long): ProductEntity?
+
+    @Query("SELECT * FROM products WHERE barcode = :barcode")
+    fun getProductByBarcode(barcode: String): ProductEntity?
+
+    @Query("SELECT * FROM products WHERE barcode IN(:barcodeList)")
+    fun getProductsByBarcode(barcodeList: List<String>): List<ProductEntity>
+
     @Insert
     fun insertAll(list: List<ProductEntity>)
 

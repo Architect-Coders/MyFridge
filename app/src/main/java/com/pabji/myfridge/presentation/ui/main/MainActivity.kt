@@ -4,39 +4,36 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.pabji.myfridge.R
-import com.pabji.myfridge.common.extensions.getViewModel
+import com.pabji.myfridge.common.extensions.startActivity
 import com.pabji.myfridge.presentation.adapters.MainViewPagerAdapter
+import com.pabji.myfridge.presentation.ui.createProduct.CreateProductActivity
 import com.pabji.myfridge.presentation.ui.productList.ProductListFragment
 import com.pabji.myfridge.presentation.ui.searchProducts.SearchProductsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var viewModel: MainViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        viewModel = getViewModel { MainViewModel() }.also {
-            it.navigator = MainNavigator(this)
-        }
         setViewPager()
         setBottomNavigation()
         setFab()
     }
 
     private fun setViewPager() {
-        vp_container.let {
-            it.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            it.adapter = MainViewPagerAdapter(
-                this, listOf(
+        vp_container.run {
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            offscreenPageLimit = 2
+            adapter = MainViewPagerAdapter(supportFragmentManager, lifecycle).apply {
+                list = listOf(
                     ProductListFragment.newInstance(),
                     SearchProductsFragment.newInstance()
                 )
-            )
-            it.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            }
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     onPagePositionSelected(position)
@@ -58,17 +55,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setFab() {
-        fab.setOnClickListener { viewModel.onFabClick() }
+        fab.setOnClickListener { startActivity<CreateProductActivity> {} }
     }
 
     private fun onPagePositionSelected(position: Int) {
         when (position) {
-            PRODUCT_LIST_POSITION -> {
-                fab.show()
-            }
-            SEARCH_POSITION -> {
-                fab.hide()
-            }
+            PRODUCT_LIST_POSITION -> fab.show()
+            SEARCH_POSITION -> fab.hide()
         }
     }
 

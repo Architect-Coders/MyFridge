@@ -4,3 +4,4 @@ sealed class DomainError
 object SearchError : DomainError()
 object DetailError : DomainError()
 
+

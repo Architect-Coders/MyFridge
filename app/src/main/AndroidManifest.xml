@@ -26,9 +26,12 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".presentation.ui.productDetail.ProductDetailActivity"
+                android:parentActivityName=".presentation.ui.main.MainActivity" />
+        <activity
                 android:name=".presentation.ui.createProduct.CreateProductActivity"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:windowSoftInputMode="stateVisible|adjustResize" />
+                android:parentActivityName=".presentation.ui.main.MainActivity" />
+
     </application>
 
 </manifest>

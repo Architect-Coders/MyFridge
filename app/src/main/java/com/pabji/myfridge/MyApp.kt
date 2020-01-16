@@ -15,7 +15,8 @@ class MyApp : Application() {
         db = Room.databaseBuilder(
                 this,
             ProductDatabase::class.java, "products.db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     companion object {
