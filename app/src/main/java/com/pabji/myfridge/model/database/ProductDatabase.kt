@@ -1,9 +1,9 @@
-package com.pabji.myfridge.data.database
+package com.pabji.myfridge.model.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.pabji.myfridge.data.database.daos.ProductDao
-import com.pabji.myfridge.data.database.entities.ProductEntity
+import com.pabji.myfridge.model.database.daos.ProductDao
+import com.pabji.myfridge.model.database.entities.ProductEntity
 
 @Database(entities = [ProductEntity::class], version = 2)
 abstract class ProductDatabase : RoomDatabase() {

@@ -1,10 +1,10 @@
-package com.pabji.myfridge.presentation.ui.createProduct
+package com.pabji.myfridge.ui.createProduct
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pabji.myfridge.common.BaseViewModel
 import com.pabji.myfridge.data.repository.ProductRepository
-import com.pabji.myfridge.domain.dtos.ProductDTO
+import com.pabji.myfridge.domain.dtos.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,7 +28,7 @@ class CreateProductViewModel(private val productRepository: ProductRepository) :
 
     fun onFabClick() {
         launch {
-            productRepository.insert(ProductDTO(name = name))
+            productRepository.insert(Product(name = name))
             _viewState.value = Finish
         }
     }

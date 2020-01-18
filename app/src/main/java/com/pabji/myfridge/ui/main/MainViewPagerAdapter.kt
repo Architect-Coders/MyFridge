@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.adapters
+package com.pabji.myfridge.ui.main
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

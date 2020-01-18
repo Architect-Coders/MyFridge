@@ -1,11 +1,10 @@
 package com.pabji.myfridge.data.datasources
 
 import com.pabji.myfridge.MyApp
-import com.pabji.myfridge.data.utils.toProductDTO
 import com.pabji.myfridge.data.utils.toProductDTOListLiveData
 import com.pabji.myfridge.data.utils.toProductEntity
 import com.pabji.myfridge.data.utils.toProductEntityList
-import com.pabji.myfridge.domain.dtos.ProductDTO
+import com.pabji.myfridge.domain.dtos.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -18,16 +17,16 @@ class ProductDBDatasourceImpl(application: MyApp) : ProductDBDatasource {
     override suspend fun getProductById(productId: Long) =
         withContext(Dispatchers.IO) { productDao.getProductById(productId)?.toProductDTO() }
 
-    override suspend fun insertAll(productList: List<ProductDTO>) =
+    override suspend fun insertAll(productList: List<Product>) =
         withContext(Dispatchers.IO) { productDao.insertAll(productList.toProductEntityList()) }
 
-    override suspend fun insert(product: ProductDTO) =
+    override suspend fun insert(product: Product) =
         withContext(Dispatchers.IO) { productDao.insert(product.toProductEntity()) }
 
-    override suspend fun remove(product: ProductDTO) =
+    override suspend fun remove(product: Product) =
         withContext(Dispatchers.IO) { productDao.remove(product.toProductEntity()) }
 
-    override suspend fun getProductByBarcode(barcode: String): ProductDTO? =
+    override suspend fun getProductByBarcode(barcode: String): Product? =
         withContext(Dispatchers.IO) { productDao.getProductByBarcode(barcode)?.toProductDTO() }
 
     override suspend fun getProductsByBarcode(barcodeList: List<String>) =

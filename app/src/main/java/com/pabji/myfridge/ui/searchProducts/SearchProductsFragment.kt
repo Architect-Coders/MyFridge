@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.searchProducts
+package com.pabji.myfridge.ui.searchProducts
 
 import android.app.SearchManager
 import android.content.Context
@@ -20,9 +20,9 @@ import com.pabji.myfridge.data.datasources.ProductNetworkDatasourceImpl
 import com.pabji.myfridge.data.repository.ProductRepositoryImpl
 import com.pabji.myfridge.domain.errors.DomainError
 import com.pabji.myfridge.domain.errors.SearchError
-import com.pabji.myfridge.presentation.adapters.ProductListAdapter
-import com.pabji.myfridge.presentation.models.Product
-import com.pabji.myfridge.presentation.ui.productDetail.ProductDetailActivity
+import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
+import com.pabji.myfridge.ui.common.uiModels.ItemProductList
+import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_products.*
 
@@ -118,7 +118,7 @@ class SearchProductsFragment : BaseFragment() {
         }
     }
 
-    private fun showProductList(list: List<Product>) {
+    private fun showProductList(list: List<ItemProductList>) {
         progress_bar.hide()
         adapter.productList = list
     }

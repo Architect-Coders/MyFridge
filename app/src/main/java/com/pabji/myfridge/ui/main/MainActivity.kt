@@ -1,14 +1,13 @@
-package com.pabji.myfridge.presentation.ui.main
+package com.pabji.myfridge.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.extensions.startActivity
-import com.pabji.myfridge.presentation.adapters.MainViewPagerAdapter
-import com.pabji.myfridge.presentation.ui.createProduct.CreateProductActivity
-import com.pabji.myfridge.presentation.ui.productList.ProductListFragment
-import com.pabji.myfridge.presentation.ui.searchProducts.SearchProductsFragment
+import com.pabji.myfridge.ui.createProduct.CreateProductActivity
+import com.pabji.myfridge.ui.productList.ProductListFragment
+import com.pabji.myfridge.ui.searchProducts.SearchProductsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +26,10 @@ class MainActivity : AppCompatActivity() {
         vp_container.run {
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             offscreenPageLimit = 2
-            adapter = MainViewPagerAdapter(supportFragmentManager, lifecycle).apply {
+            adapter = MainViewPagerAdapter(
+                supportFragmentManager,
+                lifecycle
+            ).apply {
                 list = listOf(
                     ProductListFragment.newInstance(),
                     SearchProductsFragment.newInstance()

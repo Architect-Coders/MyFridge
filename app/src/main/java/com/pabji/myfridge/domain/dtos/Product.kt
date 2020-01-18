@@ -1,6 +1,6 @@
 package com.pabji.myfridge.domain.dtos
 
-data class ProductDTO(
+data class Product(
     val id: Long? = null,
     val barcode: String? = null,
     val name: String? = null,

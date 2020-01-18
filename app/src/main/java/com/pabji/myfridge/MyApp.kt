@@ -2,7 +2,7 @@ package com.pabji.myfridge
 
 import android.app.Application
 import androidx.room.Room
-import com.pabji.myfridge.data.database.ProductDatabase
+import com.pabji.myfridge.model.database.ProductDatabase
 
 class MyApp : Application() {
 

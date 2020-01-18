@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.productList
+package com.pabji.myfridge.ui.productList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,9 +13,9 @@ import com.pabji.myfridge.common.extensions.startActivity
 import com.pabji.myfridge.data.datasources.ProductDBDatasourceImpl
 import com.pabji.myfridge.data.datasources.ProductNetworkDatasourceImpl
 import com.pabji.myfridge.data.repository.ProductRepositoryImpl
-import com.pabji.myfridge.presentation.adapters.ProductListAdapter
-import com.pabji.myfridge.presentation.models.Product
-import com.pabji.myfridge.presentation.ui.productDetail.ProductDetailActivity
+import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
+import com.pabji.myfridge.ui.common.uiModels.ItemProductList
+import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : BaseFragment() {
@@ -61,7 +61,7 @@ class ProductListFragment : BaseFragment() {
         }
     }
 
-    private fun updateProductList(productList: List<Product>) {
+    private fun updateProductList(productList: List<ItemProductList>) {
         adapter.productList = productList
     }
 

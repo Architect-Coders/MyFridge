@@ -4,4 +4,4 @@
         android:id="@+id/rv_product_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.productList.ProductListFragment" />
+        tools:context=".ui.productList.ProductListFragment" />

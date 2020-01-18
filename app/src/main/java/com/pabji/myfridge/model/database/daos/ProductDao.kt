@@ -1,14 +1,13 @@
-package com.pabji.myfridge.data.database.daos
+package com.pabji.myfridge.model.database.daos
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.pabji.myfridge.data.database.entities.ProductEntity
+import com.pabji.myfridge.model.database.entities.ProductEntity
 
 @Dao
 interface ProductDao {
 
     @Query("SELECT * FROM products")
-    fun getAll(): LiveData<List<ProductEntity>>
+    fun getAll(): List<ProductEntity>
 
     @Query("SELECT * FROM products WHERE id = :productId")
     fun getProductById(productId: Long): ProductEntity?

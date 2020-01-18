@@ -2,10 +2,8 @@ package com.pabji.myfridge.presentation.extensions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.pabji.myfridge.domain.dtos.ProductDTO
-import com.pabji.myfridge.presentation.models.Product
 
-internal fun ProductDTO.toProduct() =
+internal fun com.pabji.myfridge.domain.dtos.Product.toProduct() =
     Product(
         productId = id,
         barcode = barcode,
@@ -23,15 +21,16 @@ internal fun ProductDTO.toProduct() =
         previewUrl = previewUrl ?: "",
         existInFridge = existInFridge
     )
-internal fun List<ProductDTO>.toProductList() = map { it.toProduct() }
-internal fun LiveData<List<ProductDTO>>.toProductListLiveData() =
+
+internal fun List<com.pabji.myfridge.domain.dtos.Product>.toProductList() = map { it.toProduct() }
+internal fun LiveData<List<com.pabji.myfridge.domain.dtos.Product>>.toProductListLiveData() =
     Transformations.map(this) { it.toProductList() }
 
-internal fun LiveData<ProductDTO>.toProductLiveData() =
+internal fun LiveData<com.pabji.myfridge.domain.dtos.Product>.toProductLiveData() =
     Transformations.map(this) { it.toProduct() }
 
 internal fun Product.toProductDTO() =
-    ProductDTO(
+    com.pabji.myfridge.domain.dtos.Product(
         productId,
         barcode,
         name,

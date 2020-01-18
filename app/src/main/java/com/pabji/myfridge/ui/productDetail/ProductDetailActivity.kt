@@ -1,4 +1,4 @@
-package com.pabji.myfridge.presentation.ui.productDetail
+package com.pabji.myfridge.ui.productDetail
 
 import android.os.Bundle
 import android.widget.Toast
@@ -6,16 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import coil.api.load
 import coil.size.Scale
+import com.pabji.data.repositories.ProductRepositoryImpl
 import com.pabji.myfridge.MyApp.Companion.app
 import com.pabji.myfridge.R
 import com.pabji.myfridge.common.extensions.getViewModel
 import com.pabji.myfridge.common.extensions.gone
 import com.pabji.myfridge.common.extensions.setVisible
 import com.pabji.myfridge.common.extensions.visible
-import com.pabji.myfridge.data.datasources.ProductDBDatasourceImpl
-import com.pabji.myfridge.data.datasources.ProductNetworkDatasourceImpl
-import com.pabji.myfridge.data.repository.ProductRepositoryImpl
-import com.pabji.myfridge.presentation.models.Product
+import com.pabji.myfridge.model.database.RoomDataSource
+import com.pabji.myfridge.ui.common.uiModels.ItemProductList
+import com.pabji.usecases.GetProductDetail
+import com.pabji.usecases.SaveProduct
 import kotlinx.android.synthetic.main.activity_product_detail.*
 
 class ProductDetailActivity : AppCompatActivity() {
@@ -28,9 +29,11 @@ class ProductDetailActivity : AppCompatActivity() {
         setTitle(R.string.product_detail_title)
 
         viewModel = getViewModel {
+            val repository = ProductRepositoryImpl(RoomDataSource(app.db),)
             ProductDetailViewModel(
-                intent.getParcelableExtra(INTENT_PRODUCT),
-                ProductRepositoryImpl(ProductDBDatasourceImpl(app), ProductNetworkDatasourceImpl())
+                intent.getSerializableExtra(INTENT_PRODUCT) as? ItemProductList,
+                GetProductDetail(repository),
+                SaveProduct(repository)
             )
         }.also {
             it.viewState.observe(this, Observer(::updateUI))
@@ -47,14 +50,14 @@ class ProductDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSaved(product: Product) {
+    private fun showSaved(product: ProductDetail) {
         Toast.makeText(this, "${product.name} has been saved in your fridge", Toast.LENGTH_SHORT)
             .show()
         btn_add.gone()
     }
 
     private fun showProduct(
-        product: Product
+        product: ProductDetail
     ) {
         btn_add.setVisible(!product.existInFridge)
         product.run {
@@ -66,14 +69,14 @@ class ProductDetailActivity : AppCompatActivity() {
 
             tv_product_name.text = name
 
-            genericName?.let {
+            genericName.let {
                 tv_generic_name.run {
                     text = it
                     visible()
                 }
             }
 
-            ingredientsText?.let {
+            ingredientsText.let {
                 tv_ingredients.text = it
                 ll_ingredients.visible()
             }
