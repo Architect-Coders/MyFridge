@@ -2,7 +2,7 @@ package com.pabji.data.datasources
 
 import com.pabji.domain.Product
 
-interface ProductLocalDatasource {
+interface LocalDatasource {
     fun getProductListByBarcodeList(barcodeList: List<String>): List<Product>
     fun getProductByBarcode(barcode: String): Product?
     fun getProductById(productId: Long): Product?

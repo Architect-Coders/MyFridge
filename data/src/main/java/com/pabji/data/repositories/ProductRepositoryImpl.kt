@@ -1,11 +1,11 @@
 package com.pabji.data.repositories
 
-import com.pabji.data.datasources.ProductLocalDatasource
+import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.ProductRemoteDatasource
 import com.pabji.domain.Product
 
 class ProductRepositoryImpl(
-    private val localDataSource: ProductLocalDatasource,
+    private val localDataSource: LocalDatasource,
     private val remoteDataSource: ProductRemoteDatasource
 ) : ProductRepository {
 
