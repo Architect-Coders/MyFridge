@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.pabji.myfridge.R
 import com.pabji.myfridge.ui.common.extensions.startActivity
-import com.pabji.myfridge.ui.createProduct.CreateProductActivity
+import com.pabji.myfridge.ui.newProduct.NewProductActivity
 import com.pabji.myfridge.ui.productList.ProductListFragment
 import com.pabji.myfridge.ui.searchProducts.SearchProductsFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setFab() {
-        fab.setOnClickListener { startActivity<CreateProductActivity> {} }
+        fab.setOnClickListener { startActivity<NewProductActivity> {} }
     }
 
     private fun onPagePositionSelected(position: Int) {

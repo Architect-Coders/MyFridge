@@ -9,43 +9,31 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.internal.view.SupportMenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pabji.data.repositories.ProductRepositoryImpl
 import com.pabji.domain.DomainError
 import com.pabji.domain.SearchError
 import com.pabji.myfridge.R
-import com.pabji.myfridge.model.database.RoomDataSource
-import com.pabji.myfridge.model.network.RetrofitDataSource
 import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
-import com.pabji.myfridge.ui.common.extensions.getViewModel
 import com.pabji.myfridge.ui.common.extensions.onTextChange
 import com.pabji.myfridge.ui.common.extensions.setVisible
 import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
-import com.pabji.usecases.SearchProductByTerm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_products.*
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchProductsFragment : BaseFragment() {
 
     private var instanceState: Bundle? = null
     private lateinit var searchView: SearchView
     private lateinit var adapter: ProductListAdapter
-    private lateinit var viewModel: SearchProductsViewModel
+
+    private val viewModel: SearchProductsViewModel by currentScope.viewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = getViewModel {
-            SearchProductsViewModel(
-                SearchProductByTerm(
-                    ProductRepositoryImpl(
-                        RoomDataSource(app.db),
-                        RetrofitDataSource(app.apiService)
-                    )
-                )
-            )
-        }
         setHasOptionsMenu(true)
     }
 
