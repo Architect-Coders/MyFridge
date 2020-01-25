@@ -1,6 +1,6 @@
 package com.pabji.myfridge.ui.productList
 
-import com.pabji.myfridge.domain.errors.DomainError
+import com.pabji.domain.DomainError
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 
 sealed class ProductListViewState

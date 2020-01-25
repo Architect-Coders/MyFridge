@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.pabji.data.repositories.ProductRepositoryImpl
 import com.pabji.myfridge.R
-import com.pabji.myfridge.common.BaseFragment
-import com.pabji.myfridge.common.extensions.getViewModel
-import com.pabji.myfridge.common.extensions.startActivity
-import com.pabji.myfridge.data.datasources.ProductDBDatasourceImpl
-import com.pabji.myfridge.data.datasources.ProductNetworkDatasourceImpl
-import com.pabji.myfridge.data.repository.ProductRepositoryImpl
+import com.pabji.myfridge.model.database.RoomDataSource
+import com.pabji.myfridge.model.network.RetrofitDataSource
+import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
+import com.pabji.myfridge.ui.common.extensions.getViewModel
+import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
+import com.pabji.usecases.GetMyProducts
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : BaseFragment() {
@@ -27,9 +28,11 @@ class ProductListFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         viewModel = getViewModel {
             ProductListViewModel(
-                ProductRepositoryImpl(
-                    ProductDBDatasourceImpl(app),
-                    ProductNetworkDatasourceImpl()
+                GetMyProducts(
+                    ProductRepositoryImpl(
+                        RoomDataSource(app.db),
+                        RetrofitDataSource(app.apiService)
+                    )
                 )
             )
         }
@@ -43,10 +46,15 @@ class ProductListFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_product_list, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getProductList()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setProductListView()
-        viewModel.productList.observe(this, Observer(::updateProductList))
+        viewModel.productList.observe(viewLifecycleOwner, Observer(::updateProductList))
     }
 
     private fun setProductListView() {

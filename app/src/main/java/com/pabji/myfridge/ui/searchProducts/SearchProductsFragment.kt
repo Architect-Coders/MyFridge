@@ -9,20 +9,21 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.internal.view.SupportMenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.pabji.data.repositories.ProductRepositoryImpl
+import com.pabji.domain.DomainError
+import com.pabji.domain.SearchError
 import com.pabji.myfridge.R
-import com.pabji.myfridge.common.BaseFragment
-import com.pabji.myfridge.common.extensions.getViewModel
-import com.pabji.myfridge.common.extensions.onTextChange
-import com.pabji.myfridge.common.extensions.setVisible
-import com.pabji.myfridge.common.extensions.startActivity
-import com.pabji.myfridge.data.datasources.ProductDBDatasourceImpl
-import com.pabji.myfridge.data.datasources.ProductNetworkDatasourceImpl
-import com.pabji.myfridge.data.repository.ProductRepositoryImpl
-import com.pabji.myfridge.domain.errors.DomainError
-import com.pabji.myfridge.domain.errors.SearchError
+import com.pabji.myfridge.model.database.RoomDataSource
+import com.pabji.myfridge.model.network.RetrofitDataSource
+import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
+import com.pabji.myfridge.ui.common.extensions.getViewModel
+import com.pabji.myfridge.ui.common.extensions.onTextChange
+import com.pabji.myfridge.ui.common.extensions.setVisible
+import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
+import com.pabji.usecases.SearchProductByTerm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_products.*
 
@@ -37,9 +38,11 @@ class SearchProductsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         viewModel = getViewModel {
             SearchProductsViewModel(
-                ProductRepositoryImpl(
-                    ProductDBDatasourceImpl(app),
-                    ProductNetworkDatasourceImpl()
+                SearchProductByTerm(
+                    ProductRepositoryImpl(
+                        RoomDataSource(app.db),
+                        RetrofitDataSource(app.apiService)
+                    )
                 )
             )
         }
@@ -57,7 +60,7 @@ class SearchProductsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setProductListView()
-        viewModel.viewState.observe(this, Observer(::updateUI))
+        viewModel.viewState.observe(viewLifecycleOwner, Observer(::updateUI))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -1,28 +1,55 @@
 package com.pabji.data.repositories
 
 import com.pabji.data.datasources.LocalDatasource
-import com.pabji.data.datasources.ProductRemoteDatasource
-import com.pabji.domain.Product
+import com.pabji.data.datasources.RemoteDatasource
+import com.pabji.domain.*
 
 class ProductRepositoryImpl(
     private val localDataSource: LocalDatasource,
-    private val remoteDataSource: ProductRemoteDatasource
+    private val remoteDataSource: RemoteDatasource
 ) : ProductRepository {
 
-    override fun getProducts() = localDataSource.getProductList()
+    override suspend fun getProducts() = localDataSource.getProductList()
 
-    override fun saveProduct(product: Product) = localDataSource.saveProduct(product)
+    override suspend fun saveProduct(product: Product) = localDataSource.saveProduct(product)
 
-    override fun removeProduct(product: Product) = localDataSource.removeProduct(product)
+    override suspend fun removeProduct(product: Product) = localDataSource.removeProduct(product)
 
-    override fun searchProducts(searchTerm: String?, page: Int) =
-        remoteDataSource.searchProducts(searchTerm, page)
+    override suspend fun searchProducts(
+        searchTerm: String?,
+        page: Int
+    ): Either<DomainError, List<Product>> {
 
-    override fun getProductListByBarcodeList(barcodeList: List<String>) =
+        val localProducts = localDataSource.getProductsByTerm(searchTerm)
+
+        val remoteProducts = remoteDataSource.searchProducts(searchTerm, page).map {
+            it.filter { remoteProduct ->
+                remoteProduct.barcode !in localProducts.getBarcodeList()
+            }
+        }
+        return localProducts.flatMap { localProductList ->
+            remoteProducts.map { remoteProductList ->
+                localProductList + remoteProductList
+            }
+        }
+    }
+
+    override suspend fun getProductListByBarcodeList(barcodeList: List<String>) =
         localDataSource.getProductListByBarcodeList(barcodeList)
 
-    override fun getProductById(productId: Long) = localDataSource.getProductById(productId)
+    override suspend fun getProductById(productId: Long) = localDataSource.getProductById(productId)
 
-    override fun getProductByBarcode(barcode: String) = localDataSource.getProductByBarcode(barcode)
-        ?: remoteDataSource.getProductByBarcode(barcode)
+    override suspend fun getProductByBarcode(barcode: String) =
+        with(localDataSource.getProductByBarcode(barcode)) {
+            if (isLeft) {
+                remoteDataSource.getProductByBarcode(barcode)
+            } else {
+                this
+            }
+        }
+
+    private fun Either<*, List<Product>>.getBarcodeList() =
+        fold({ emptyList<String>() }, { productList ->
+            productList.map { product -> product.barcode }
+        })
 }

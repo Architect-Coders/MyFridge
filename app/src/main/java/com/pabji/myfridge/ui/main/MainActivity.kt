@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.pabji.myfridge.R
-import com.pabji.myfridge.common.extensions.startActivity
+import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.createProduct.CreateProductActivity
 import com.pabji.myfridge.ui.productList.ProductListFragment
 import com.pabji.myfridge.ui.searchProducts.SearchProductsFragment

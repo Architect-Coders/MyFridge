@@ -7,23 +7,23 @@ import com.pabji.myfridge.model.database.entities.ProductEntity
 interface ProductDao {
 
     @Query("SELECT * FROM products")
-    fun getAll(): List<ProductEntity>
+    suspend fun getAll(): List<ProductEntity>
 
     @Query("SELECT * FROM products WHERE id = :productId")
-    fun getProductById(productId: Long): ProductEntity?
+    suspend fun getProductById(productId: Long): ProductEntity?
 
     @Query("SELECT * FROM products WHERE barcode = :barcode")
-    fun getProductByBarcode(barcode: String): ProductEntity?
+    suspend fun getProductByBarcode(barcode: String): ProductEntity?
 
     @Query("SELECT * FROM products WHERE barcode IN(:barcodeList)")
-    fun getProductsByBarcode(barcodeList: List<String>): List<ProductEntity>
+    suspend fun getProductsByBarcode(barcodeList: List<String>): List<ProductEntity>
 
-    @Insert
-    fun insertAll(list: List<ProductEntity>)
+    @Query("SELECT * FROM products WHERE name LIKE :searchTerm")
+    suspend fun getProductsByTerm(searchTerm: String): List<ProductEntity>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(product: ProductEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(product: ProductEntity)
 
     @Delete
-    fun remove(product: ProductEntity)
+    suspend fun remove(product: ProductEntity)
 }

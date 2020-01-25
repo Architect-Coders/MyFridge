@@ -1,9 +1,12 @@
 package com.pabji.usecases
 
 import com.pabji.data.repositories.ProductRepository
+import com.pabji.domain.DomainError
+import com.pabji.domain.Either
 import com.pabji.domain.Product
 
 class GetMyProducts(private val productRepository: ProductRepository) {
 
-    operator fun invoke(): List<Product> = productRepository.getProducts()
+    suspend operator fun invoke(): Either<DomainError, List<Product>> =
+        productRepository.getProducts()
 }

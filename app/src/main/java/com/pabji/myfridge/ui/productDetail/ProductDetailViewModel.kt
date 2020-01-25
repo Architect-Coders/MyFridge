@@ -2,7 +2,8 @@ package com.pabji.myfridge.ui.productDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pabji.myfridge.common.BaseViewModel
+import com.pabji.domain.fold
+import com.pabji.myfridge.ui.common.BaseViewModel
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import com.pabji.myfridge.ui.common.uiModels.toProduct
 import com.pabji.usecases.GetProductDetail
@@ -26,11 +27,11 @@ class ProductDetailViewModel(
         launch {
             _viewState.value = Loading
             with(product) {
-                getProductDetail(toProduct())?.run {
-                    _viewState.value = ShowProduct(toProductDetail())
-                } ?: run {
+                getProductDetail(toProduct()).fold({
                     _viewState.value = ShowError
-                }
+                }, {
+                    _viewState.value = ShowProduct(it.toProductDetail())
+                })
             }
         }
     }

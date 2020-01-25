@@ -1,19 +1,15 @@
 package com.pabji.usecases
 
 import com.pabji.data.repositories.ProductRepository
+import com.pabji.domain.DomainError
+import com.pabji.domain.Either
+import com.pabji.domain.Product
 
 class SearchProductByTerm(private val productRepository: ProductRepository) {
 
-    operator fun invoke(searchTerm: String, page: Int = 1) = with(productRepository) {
-        val searchProducts = searchProducts(searchTerm, page)
-        val dbProducts =
-            getProductListByBarcodeList(searchProducts.map { it.barcode }).map { it.barcode }
+    suspend operator fun invoke(
+        searchTerm: String,
+        page: Int = 1
+    ): Either<DomainError, List<Product>> = productRepository.searchProducts(searchTerm, page)
 
-        searchProducts.map {
-            if (it.barcode in dbProducts) {
-                it.existInFridge = true
-            }
-            it
-        }
-    }
 }

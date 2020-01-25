@@ -5,5 +5,5 @@ import com.pabji.domain.Product
 
 class RemoveProduct(private val productRepository: ProductRepository) {
 
-    operator fun invoke(product: Product) = productRepository.removeProduct(product)
+    suspend operator fun invoke(product: Product) = productRepository.removeProduct(product)
 }

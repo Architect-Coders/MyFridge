@@ -3,7 +3,7 @@ package com.pabji.myfridge.model.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.pabji.domain.Product
-import com.pabji.myfridge.common.extensions.getListByDelimit
+import com.pabji.myfridge.model.common.extensions.getListByDelimit
 
 @Entity(tableName = "products")
 data class ProductEntity(
@@ -38,7 +38,8 @@ internal fun ProductEntity.toProduct() =
         genericName,
         ingredientsText,
         imageIngredientsUrl,
-        categories.getListByDelimit(",")
+        categories.getListByDelimit(","),
+        existInFridge = true
     )
 
 internal fun Product.toProductEntity() = ProductEntity(

@@ -9,11 +9,12 @@ import coil.size.Scale
 import com.pabji.data.repositories.ProductRepositoryImpl
 import com.pabji.myfridge.MyApp.Companion.app
 import com.pabji.myfridge.R
-import com.pabji.myfridge.common.extensions.getViewModel
-import com.pabji.myfridge.common.extensions.gone
-import com.pabji.myfridge.common.extensions.setVisible
-import com.pabji.myfridge.common.extensions.visible
 import com.pabji.myfridge.model.database.RoomDataSource
+import com.pabji.myfridge.model.network.RetrofitDataSource
+import com.pabji.myfridge.ui.common.extensions.getViewModel
+import com.pabji.myfridge.ui.common.extensions.gone
+import com.pabji.myfridge.ui.common.extensions.setVisible
+import com.pabji.myfridge.ui.common.extensions.visible
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import com.pabji.usecases.GetProductDetail
 import com.pabji.usecases.SaveProduct
@@ -29,7 +30,8 @@ class ProductDetailActivity : AppCompatActivity() {
         setTitle(R.string.product_detail_title)
 
         viewModel = getViewModel {
-            val repository = ProductRepositoryImpl(RoomDataSource(app.db),)
+            val repository =
+                ProductRepositoryImpl(RoomDataSource(app.db), RetrofitDataSource(app.apiService))
             ProductDetailViewModel(
                 intent.getSerializableExtra(INTENT_PRODUCT) as? ItemProductList,
                 GetProductDetail(repository),

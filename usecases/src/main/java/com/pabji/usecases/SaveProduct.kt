@@ -5,5 +5,5 @@ import com.pabji.domain.Product
 
 class SaveProduct(private val productRepository: ProductRepository) {
 
-    operator fun invoke(product: Product) = productRepository.saveProduct(product)
+    suspend operator fun invoke(product: Product) = productRepository.saveProduct(product)
 }

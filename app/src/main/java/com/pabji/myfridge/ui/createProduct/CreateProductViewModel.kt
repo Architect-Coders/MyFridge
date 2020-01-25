@@ -2,14 +2,14 @@ package com.pabji.myfridge.ui.createProduct
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pabji.myfridge.common.BaseViewModel
-import com.pabji.myfridge.data.repository.ProductRepository
-import com.pabji.myfridge.domain.dtos.Product
+import com.pabji.domain.Product
+import com.pabji.myfridge.ui.common.BaseViewModel
+import com.pabji.usecases.SaveProduct
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CreateProductViewModel(private val productRepository: ProductRepository) : BaseViewModel() {
+class CreateProductViewModel(private val saveProduct: SaveProduct) : BaseViewModel() {
 
     private val _productValidated = MutableLiveData<Boolean>()
     val productValidated: LiveData<Boolean> = _productValidated
@@ -28,8 +28,10 @@ class CreateProductViewModel(private val productRepository: ProductRepository) :
 
     fun onFabClick() {
         launch {
-            productRepository.insert(Product(name = name))
-            _viewState.value = Finish
+            name?.run {
+                saveProduct(Product(name = this))
+                _viewState.value = Finish
+            }
         }
     }
 

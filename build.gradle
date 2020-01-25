@@ -35,7 +35,7 @@ allprojects {
 }
 
 ext{
-    lifecycle_version = '2.1.0'
+    lifecycle_version = '2.2.0'
     room_version = '2.2.3'
     retrofit_version = '2.6.0'
     viewpager_version = '1.0.0'
