@@ -41,4 +41,5 @@ ext{
     viewpager_version = '1.0.0'
     arrow_version = '0.10.3'
     coil_version = '0.8.0'
+    koin_version = '2.0.1'
 }

@@ -6,37 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.pabji.data.repositories.ProductRepositoryImpl
 import com.pabji.myfridge.R
-import com.pabji.myfridge.model.database.RoomDataSource
-import com.pabji.myfridge.model.network.RetrofitDataSource
 import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
-import com.pabji.myfridge.ui.common.extensions.getViewModel
 import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
-import com.pabji.usecases.GetMyProducts
 import kotlinx.android.synthetic.main.fragment_product_list.*
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class ProductListFragment : BaseFragment() {
 
     private lateinit var adapter: ProductListAdapter
-    private lateinit var viewModel: ProductListViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = getViewModel {
-            ProductListViewModel(
-                GetMyProducts(
-                    ProductRepositoryImpl(
-                        RoomDataSource(app.db),
-                        RetrofitDataSource(app.apiService)
-                    )
-                )
-            )
-        }
-    }
+    private val viewModel: ProductListViewModel by currentScope.viewModel(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,

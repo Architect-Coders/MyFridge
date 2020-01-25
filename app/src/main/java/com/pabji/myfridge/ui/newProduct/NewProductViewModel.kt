@@ -1,4 +1,4 @@
-package com.pabji.myfridge.ui.createProduct
+package com.pabji.myfridge.ui.newProduct
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CreateProductViewModel(private val saveProduct: SaveProduct) : BaseViewModel() {
+class NewProductViewModel(private val saveProduct: SaveProduct) : BaseViewModel() {
 
     private val _productValidated = MutableLiveData<Boolean>()
     val productValidated: LiveData<Boolean> = _productValidated

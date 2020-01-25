@@ -6,40 +6,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import coil.api.load
 import coil.size.Scale
-import com.pabji.data.repositories.ProductRepositoryImpl
-import com.pabji.myfridge.MyApp.Companion.app
 import com.pabji.myfridge.R
-import com.pabji.myfridge.model.database.RoomDataSource
-import com.pabji.myfridge.model.network.RetrofitDataSource
-import com.pabji.myfridge.ui.common.extensions.getViewModel
 import com.pabji.myfridge.ui.common.extensions.gone
 import com.pabji.myfridge.ui.common.extensions.setVisible
 import com.pabji.myfridge.ui.common.extensions.visible
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
-import com.pabji.usecases.GetProductDetail
-import com.pabji.usecases.SaveProduct
 import kotlinx.android.synthetic.main.activity_product_detail.*
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class ProductDetailActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: ProductDetailViewModel
+    private val viewModel: ProductDetailViewModel by currentScope.viewModel(this) {
+        parametersOf(intent.getSerializableExtra(INTENT_PRODUCT) as? ItemProductList)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_detail)
         setTitle(R.string.product_detail_title)
 
-        viewModel = getViewModel {
-            val repository =
-                ProductRepositoryImpl(RoomDataSource(app.db), RetrofitDataSource(app.apiService))
-            ProductDetailViewModel(
-                intent.getSerializableExtra(INTENT_PRODUCT) as? ItemProductList,
-                GetProductDetail(repository),
-                SaveProduct(repository)
-            )
-        }.also {
-            it.viewState.observe(this, Observer(::updateUI))
-        }
+        viewModel.viewState.observe(this, Observer(::updateUI))
 
         btn_add.setOnClickListener { viewModel.onClickButtonAdd() }
     }
