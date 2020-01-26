@@ -22,7 +22,7 @@ import com.pabji.myfridge.ui.searchProducts.SearchProductsViewModel
 import com.pabji.usecases.GetMyProducts
 import com.pabji.usecases.GetProductDetail
 import com.pabji.usecases.SaveProduct
-import com.pabji.usecases.SearchProductByTerm
+import com.pabji.usecases.SearchProductsByTerm
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.android.viewmodel.dsl.viewModel
@@ -61,7 +61,7 @@ val scopesModule = module {
 
     scope(named<SearchProductsFragment>()) {
         viewModel { SearchProductsViewModel(get()) }
-        scoped { SearchProductByTerm(get()) }
+        scoped { SearchProductsByTerm(get()) }
     }
 
     scope(named<NewProductActivity>()) {

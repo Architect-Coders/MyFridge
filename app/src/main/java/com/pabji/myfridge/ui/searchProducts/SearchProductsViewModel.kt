@@ -2,15 +2,15 @@ package com.pabji.myfridge.ui.searchProducts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pabji.domain.fold
+import com.pabji.domain.SearchError
 import com.pabji.myfridge.ui.common.BaseViewModel
 import com.pabji.myfridge.ui.common.uiModels.toItemProduct
-import com.pabji.usecases.SearchProductByTerm
+import com.pabji.usecases.SearchProductsByTerm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchProductsViewModel(private val searchProductByTerm: SearchProductByTerm) :
+class SearchProductsViewModel(private val searchProductsByTerm: SearchProductsByTerm) :
     BaseViewModel() {
 
     private val _viewState = MutableLiveData<SearchProductsViewState>()
@@ -35,12 +35,12 @@ class SearchProductsViewModel(private val searchProductByTerm: SearchProductByTe
     }
 
     private suspend fun searchProducts(searchTerm: String = "") {
-        withContext(Dispatchers.IO) {
-            searchProductByTerm(searchTerm).fold({
-                _viewState.postValue(ShowError(it))
-            }) { list ->
-                _viewState.postValue(ShowProductList(list.map { it.toItemProduct() }))
-            }
+        val result = withContext(Dispatchers.IO) { searchProductsByTerm(searchTerm) }
+
+        if (result.isEmpty()) {
+            _viewState.value = ShowError(SearchError)
+        } else {
+            _viewState.value = ShowProductList(result.map { it.toItemProduct() })
         }
     }
 }

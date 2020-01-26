@@ -2,7 +2,9 @@ package com.pabji.data.repositories
 
 import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
-import com.pabji.domain.*
+import com.pabji.domain.Product
+import com.pabji.domain.fold
+import com.pabji.domain.map
 
 class ProductRepositoryImpl(
     private val localDataSource: LocalDatasource,
@@ -15,27 +17,16 @@ class ProductRepositoryImpl(
 
     override suspend fun removeProduct(product: Product) = localDataSource.removeProduct(product)
 
-    override suspend fun searchProducts(
-        searchTerm: String?,
-        page: Int
-    ): Either<DomainError, List<Product>> {
+    override suspend fun searchProducts(searchTerm: String?): List<Product> {
 
-        val localProducts = localDataSource.getProductsByTerm(searchTerm)
+        val localProducts = localDataSource.getProductsByTerm(searchTerm ?: "")
 
-        val remoteProducts = remoteDataSource.searchProducts(searchTerm, page).map {
-            it.filter { remoteProduct ->
-                remoteProduct.barcode !in localProducts.getBarcodeList()
-            }
-        }
-        return localProducts.flatMap { localProductList ->
-            remoteProducts.map { remoteProductList ->
-                localProductList + remoteProductList
-            }
-        }
+        val remoteProducts = remoteDataSource.searchProducts(searchTerm)
+            .map { it.getFilteredProductsByProducts(localProducts) }
+
+        return remoteProducts.fold({ localProducts },
+            { remoteProductList -> localProducts + remoteProductList })
     }
-
-    override suspend fun getProductListByBarcodeList(barcodeList: List<String>) =
-        localDataSource.getProductListByBarcodeList(barcodeList)
 
     override suspend fun getProductById(productId: Long) = localDataSource.getProductById(productId)
 
@@ -47,9 +38,9 @@ class ProductRepositoryImpl(
                 this
             }
         }
+}
 
-    private fun Either<*, List<Product>>.getBarcodeList() =
-        fold({ emptyList<String>() }, { productList ->
-            productList.map { product -> product.barcode }
-        })
+internal fun List<Product>.getFilteredProductsByProducts(filteredProducts: List<Product>): List<Product> {
+    val barcodeList = filteredProducts.map { product -> product.barcode }
+    return filter { remoteProduct -> remoteProduct.barcode !in barcodeList }
 }
