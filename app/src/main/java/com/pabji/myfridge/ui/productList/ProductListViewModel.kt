@@ -2,7 +2,6 @@ package com.pabji.myfridge.ui.productList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pabji.domain.fold
 import com.pabji.myfridge.ui.common.BaseViewModel
 import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import com.pabji.myfridge.ui.common.uiModels.toItemProduct
@@ -18,13 +17,8 @@ class ProductListViewModel(private val getMyProducts: GetMyProducts) : BaseViewM
 
     fun getProductList() {
         launch {
-            withContext(Dispatchers.IO) {
-                getMyProducts().fold({
-
-                }, {
-                    _productList.postValue(it.map { product -> product.toItemProduct() })
-                })
-            }
+            val result = withContext(Dispatchers.IO) { getMyProducts() }
+            _productList.value = result.map { product -> product.toItemProduct() }
         }
     }
 

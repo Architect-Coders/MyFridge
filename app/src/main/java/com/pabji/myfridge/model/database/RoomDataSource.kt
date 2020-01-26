@@ -4,7 +4,6 @@ import com.pabji.data.datasources.LocalDatasource
 import com.pabji.domain.DetailError
 import com.pabji.domain.Either
 import com.pabji.domain.Product
-import com.pabji.domain.SearchError
 import com.pabji.myfridge.model.database.entities.toProduct
 import com.pabji.myfridge.model.database.entities.toProductEntity
 
@@ -29,7 +28,7 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
             Either.Left(DetailError)
         }
 
-    override suspend fun getProductList() = Either.Right(productDao.getAll().map { it.toProduct() })
+    override suspend fun getProductList() = productDao.getAll().map { it.toProduct() }
 
     override suspend fun saveProduct(product: Product) =
         productDao.insert(product.toProductEntity())
@@ -37,10 +36,7 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
     override suspend fun removeProduct(product: Product) =
         productDao.remove(product.toProductEntity())
 
-    override suspend fun getProductsByTerm(searchTerm: String?) =
-        searchTerm?.run {
-            Either.Right(productDao.getProductsByTerm(searchTerm).map { it.toProduct() })
-        } ?: run {
-            Either.Left(SearchError)
-        }
+    override suspend fun getProductsByTerm(searchTerm: String) =
+        productDao.getProductsByTerm(searchTerm).map { it.toProduct() }
+
 }

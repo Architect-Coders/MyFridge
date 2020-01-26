@@ -11,8 +11,13 @@ import com.pabji.myfridge.model.network.responses.toProduct
 
 class RetrofitDataSource(private val apiService: RetrofitApiService) : RemoteDatasource {
 
-    override suspend fun searchProducts(searchTerm: String?, page: Int) =
-        with(apiService.searchProductsByName(searchTerm, page, SIMPLE_FIELDS.joinToString(","))) {
+    override suspend fun searchProducts(searchTerm: String?) =
+        with(
+            apiService.searchProductsByName(
+                searchTerm,
+                fields = SIMPLE_FIELDS.joinToString(",")
+            )
+        ) {
             if (isSuccessful) {
                 Either.Right(body()?.products?.map { it.toProduct() } ?: emptyList())
             } else {

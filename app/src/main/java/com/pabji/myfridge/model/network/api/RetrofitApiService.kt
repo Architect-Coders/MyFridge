@@ -11,7 +11,7 @@ interface RetrofitApiService {
 
     @GET("cgi/search.pl?search_simple=1&json=1&action=process")
     suspend fun searchProductsByName(
-        @Query("search_terms") name: String? = null, @Query("page") page: Int, @Query(
+        @Query("search_terms") name: String? = null, @Query("page") page: Int = 1, @Query(
             "fields"
         ) fields: String
     ): Response<SearchResponse>
