@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "171294697452",
+    "firebase_url": "https://myfridge-ccbae.firebaseio.com",
+    "project_id": "myfridge-ccbae",
+    "storage_bucket": "myfridge-ccbae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171294697452:android:b0de1cb7295942b96702c9",
+        "android_client_info": {
+          "package_name": "com.pabji.myfridge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171294697452-lc2hr5qrucah1cejkgjrlurpofb9rso4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd06ApBR7grKGfA_Xg3upgqAoIwKvMdWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171294697452-lc2hr5qrucah1cejkgjrlurpofb9rso4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
