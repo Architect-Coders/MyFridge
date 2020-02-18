@@ -38,6 +38,12 @@ class ProductRepositoryImpl(
                 this
             }
         }
+
+    override suspend fun searchProductsByBarcode(barcodeList: List<String>): List<Product> =
+        barcodeList.mapNotNull {
+            remoteDataSource.getProductByBarcode(it).fold({ null }) { product -> product }
+        }
+
 }
 
 internal fun List<Product>.getFilteredProductsByProducts(filteredProducts: List<Product>): List<Product> {

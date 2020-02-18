@@ -21,10 +21,7 @@ import com.pabji.myfridge.ui.productList.ProductListFragment
 import com.pabji.myfridge.ui.productList.ProductListViewModel
 import com.pabji.myfridge.ui.searchProducts.SearchProductsFragment
 import com.pabji.myfridge.ui.searchProducts.SearchProductsViewModel
-import com.pabji.usecases.GetMyProducts
-import com.pabji.usecases.GetProductDetail
-import com.pabji.usecases.SaveProduct
-import com.pabji.usecases.SearchProductsByTerm
+import com.pabji.usecases.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.android.viewmodel.dsl.viewModel
@@ -78,6 +75,7 @@ val scopesModule = module {
     }
 
     scope(named<BarcodeReaderActivity>()) {
-        viewModel { BarcodeReaderViewModel() }
+        viewModel { BarcodeReaderViewModel(get()) }
+        scoped { SearchProductsByBarcode(get()) }
     }
 }

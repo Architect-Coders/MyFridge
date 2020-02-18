@@ -1,5 +1,6 @@
 package com.pabji.myfridge.model.network
 
+import android.util.Log
 import com.pabji.data.datasources.RemoteDatasource
 import com.pabji.domain.DetailError
 import com.pabji.domain.Either
@@ -30,6 +31,7 @@ class RetrofitDataSource(private val apiService: RetrofitApiService) : RemoteDat
         with(apiService.getProductDetailById(barcode, DETAIL_FIELDS.joinToString(","))) {
             if (isSuccessful) {
                 body()?.product?.run {
+                    Log.d("RetrofitDataSource", "$this")
                     Either.Right(toProduct())
                 } ?: run {
                     Either.Left(DetailError)
