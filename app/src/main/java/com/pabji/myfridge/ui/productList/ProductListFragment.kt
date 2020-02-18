@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.pabji.myfridge.R
+import com.pabji.myfridge.model.ItemProductList
 import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
 import com.pabji.myfridge.ui.common.extensions.startActivity
-import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.fragment_product_list.*
 import org.koin.android.scope.currentScope

@@ -1,7 +1,7 @@
 package com.pabji.myfridge.ui.productList
 
 import com.pabji.domain.DomainError
-import com.pabji.myfridge.ui.common.uiModels.ItemProductList
+import com.pabji.myfridge.model.ItemProductList
 
 sealed class ProductListViewState
 object Loading : ProductListViewState()

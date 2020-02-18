@@ -2,9 +2,9 @@ package com.pabji.myfridge.ui.productList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pabji.myfridge.model.ItemProductList
+import com.pabji.myfridge.model.toItemProduct
 import com.pabji.myfridge.ui.common.BaseViewModel
-import com.pabji.myfridge.ui.common.uiModels.ItemProductList
-import com.pabji.myfridge.ui.common.uiModels.toItemProduct
 import com.pabji.usecases.GetMyProducts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

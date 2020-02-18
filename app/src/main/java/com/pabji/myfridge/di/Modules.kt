@@ -6,11 +6,13 @@ import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
 import com.pabji.data.repositories.ProductRepository
 import com.pabji.data.repositories.ProductRepositoryImpl
+import com.pabji.myfridge.model.ItemProductList
 import com.pabji.myfridge.model.database.RoomDataSource
 import com.pabji.myfridge.model.database.RoomDatabase
 import com.pabji.myfridge.model.network.RetrofitDataSource
 import com.pabji.myfridge.model.network.api.RetrofitApiClient
-import com.pabji.myfridge.ui.common.uiModels.ItemProductList
+import com.pabji.myfridge.ui.barcode.BarcodeReaderActivity
+import com.pabji.myfridge.ui.barcode.BarcodeReaderViewModel
 import com.pabji.myfridge.ui.newProduct.NewProductActivity
 import com.pabji.myfridge.ui.newProduct.NewProductViewModel
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
@@ -73,5 +75,9 @@ val scopesModule = module {
         viewModel { (product: ItemProductList) -> ProductDetailViewModel(product, get(), get()) }
         scoped { GetProductDetail(get()) }
         scoped { SaveProduct(get()) }
+    }
+
+    scope(named<BarcodeReaderActivity>()) {
+        viewModel { BarcodeReaderViewModel() }
     }
 }

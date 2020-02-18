@@ -1,13 +1,10 @@
 package com.pabji.barcodereader
 
-import android.Manifest
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.FrameLayout
-import androidx.annotation.RequiresPermission
 import kotlinx.android.synthetic.main.barcode_reader_view.view.*
-import java.io.IOException
 
 class BarcodeReaderView @JvmOverloads constructor(
     context: Context,
@@ -24,13 +21,11 @@ class BarcodeReaderView @JvmOverloads constructor(
         cameraPreview.create()
     }
 
-    @RequiresPermission(Manifest.permission.CAMERA)
-    @Throws(IOException::class, SecurityException::class)
     fun start() {
         try {
             Log.e(TAG, "Start camera preview")
             cameraPreview.start(graphicOverlay)
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             Log.e(TAG, "Unable to start camera source.", e)
             cameraPreview.release()
         }

@@ -43,7 +43,8 @@ allprojects {
                 lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:2.2.0",
                 roomRuntime        : "androidx.room:room-runtime:2.2.3",
                 roomKtx            : "androidx.room:room-ktx:2.2.3",
-                viewPager2         : "androidx.viewpager2:viewpager2:1.0.0"
+                viewPager2         : "androidx.viewpager2:viewpager2:1.0.0",
+                dexter             : 'com.karumi:dexter:6.0.2'
         ]
 
         kotlinLibs = [

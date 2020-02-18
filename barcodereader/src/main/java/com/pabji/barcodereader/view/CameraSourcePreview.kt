@@ -39,7 +39,6 @@ internal class CameraSourcePreview(
         barcodeListener = listener
     }
 
-    @RequiresPermission(Manifest.permission.CAMERA)
     @Throws(IOException::class, SecurityException::class)
     fun start(overlay: GraphicOverlay?) {
         mOverlay = overlay
