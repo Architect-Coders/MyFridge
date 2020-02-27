@@ -6,8 +6,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.pabji.barcodereader.view.BarcodeGraphic
 import com.pabji.barcodereader.view.CameraImageGraphic
 import com.pabji.barcodereader.view.GraphicOverlay
 import java.io.IOException
@@ -16,7 +16,13 @@ internal class BarcodeScanningProcessor(val listener: (List<FirebaseVisionBarcod
     VisionProcessorBase<List<FirebaseVisionBarcode>>() {
 
     private val detector: FirebaseVisionBarcodeDetector by lazy {
-        FirebaseVision.getInstance().visionBarcodeDetector
+        FirebaseVision.getInstance().getVisionBarcodeDetector(
+            FirebaseVisionBarcodeDetectorOptions.Builder()
+                .setBarcodeFormats(
+                    FirebaseVisionBarcode.FORMAT_EAN_13
+                )
+                .build()
+        )
     }
 
     override fun stop() {
@@ -47,12 +53,6 @@ internal class BarcodeScanningProcessor(val listener: (List<FirebaseVisionBarcod
                     it
                 )
             graphicOverlay.add(imageGraphic)
-        }
-
-        results.forEach {
-            val barcodeGraphic =
-                BarcodeGraphic(graphicOverlay, it)
-            graphicOverlay.add(barcodeGraphic)
         }
         graphicOverlay.postInvalidate()
     }

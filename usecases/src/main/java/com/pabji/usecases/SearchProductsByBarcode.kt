@@ -5,7 +5,17 @@ import com.pabji.domain.Product
 
 class SearchProductsByBarcode(private val productRepository: ProductRepository) {
 
-    suspend operator fun invoke(barcodeList: List<String>): List<Product> =
-        productRepository.searchProductsByBarcode(barcodeList)
+    private val mutableProductList = mutableSetOf<Product>()
 
+    @Synchronized
+    suspend operator fun invoke(
+        productList: Set<Product>,
+        newBarcodeList: Set<String>
+    ): Set<Product> {
+        val productListBarcode = productList.map { it.barcode }
+        val searchList =
+            newBarcodeList.filter { it.isNotEmpty() }.subtract(productListBarcode).toList()
+        mutableProductList.addAll(productRepository.searchProductsByBarcode(searchList))
+        return mutableProductList
+    }
 }

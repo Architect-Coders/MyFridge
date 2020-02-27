@@ -1,12 +1,14 @@
 package com.pabji.data.repositories
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
 import com.pabji.domain.DetailError
 import com.pabji.domain.Either
+import com.pabji.domain.SearchError
 import com.pabji.testshared.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -26,7 +28,7 @@ class ProductRepositoryTest {
     @Mock
     lateinit var remoteDatasource: RemoteDatasource
 
-    lateinit var productRepository: ProductRepository
+    private lateinit var productRepository: ProductRepository
 
     @Before
     fun setUp() {
@@ -112,13 +114,13 @@ class ProductRepositoryTest {
     }
 
     @Test
-    fun `when getProductById with id should return product`() {
+    fun `when getProductDetail with id should return product from localDatasource`() {
         runBlocking {
             val product = mockedProduct.copy(id = 1)
 
             whenever(localDataSource.getProductById(1)).thenReturn(Either.Right(product))
 
-            val result = productRepository.getProductById(1)
+            val result = productRepository.getProductDetail(product)
 
             verify(localDataSource).getProductById(1)
             assertTrue(result.isRight)
@@ -127,31 +129,16 @@ class ProductRepositoryTest {
     }
 
     @Test
-    fun `when getProductById should return error`() {
-        runBlocking {
-
-            whenever(localDataSource.getProductById(any())).thenReturn(Either.Left(DetailError))
-
-            val result = productRepository.getProductById(any())
-
-            verify(localDataSource).getProductById(any())
-            assertTrue(result.isLeft)
-        }
-    }
-
-    @Test
-    fun `when getProductByBarcode with barcode should return product from localDatasource`() {
+    fun `when getProductDetail with barcode should return product from localDatasource`() {
         runBlocking {
             val mockedBarcode = "123456"
             val product = mockedLocalProduct.copy(barcode = mockedBarcode)
-
+            whenever(localDataSource.getProductById(any())).thenReturn(Either.Left(DetailError))
             whenever(localDataSource.getProductByBarcode(mockedBarcode)).thenReturn(
-                Either.Right(
-                    product
-                )
+                Either.Right(product)
             )
 
-            val result = productRepository.getProductByBarcode(mockedBarcode)
+            val result = productRepository.getProductDetail(product)
 
             verify(localDataSource).getProductByBarcode(mockedBarcode)
             assertTrue(result.isRight)
@@ -160,19 +147,17 @@ class ProductRepositoryTest {
     }
 
     @Test
-    fun `when getProductByBarcode with barcode should return product from remoteDatasource`() {
+    fun `when getProductDetail with barcode should return product from remoteDatasource`() {
         runBlocking {
             val mockedBarcode = "123456"
             val product = mockedLocalProduct.copy(barcode = mockedBarcode)
-
+            whenever(localDataSource.getProductById(any())).thenReturn(Either.Left(DetailError))
             whenever(localDataSource.getProductByBarcode(any())).thenReturn(Either.Left(DetailError))
             whenever(remoteDatasource.getProductByBarcode(mockedBarcode)).thenReturn(
-                Either.Right(
-                    product
-                )
+                Either.Right(product)
             )
 
-            val result = productRepository.getProductByBarcode(mockedBarcode)
+            val result = productRepository.getProductDetail(product)
 
             verify(localDataSource).getProductByBarcode(any())
             verify(remoteDatasource).getProductByBarcode(mockedBarcode)
@@ -183,19 +168,52 @@ class ProductRepositoryTest {
     }
 
     @Test
-    fun `when getProductByBarcode with barcode should return error`() {
+    fun `when getProductDetail with barcode should return error`() {
         runBlocking {
-            val mockedBarcode = "123456"
 
+            val product = mockedLocalProduct.copy()
+
+            whenever(localDataSource.getProductById(any())).thenReturn(Either.Left(DetailError))
             whenever(localDataSource.getProductByBarcode(any())).thenReturn(Either.Left(DetailError))
             whenever(remoteDatasource.getProductByBarcode(any())).thenReturn(Either.Left(DetailError))
 
-            val result = productRepository.getProductByBarcode(mockedBarcode)
+            val result = productRepository.getProductDetail(product)
 
             verify(localDataSource).getProductByBarcode(any())
             verify(remoteDatasource).getProductByBarcode(any())
 
             assertTrue(result.isLeft)
+        }
+    }
+
+    @Test
+    fun `when searchProductsByBarcode with barcodeList should return product list`() {
+        runBlocking {
+
+            whenever(remoteDatasource.getProductByBarcode(any())).thenReturn(
+                Either.Right(
+                    mockedProduct
+                )
+            )
+
+            val result = productRepository.searchProductsByBarcode(mockedBarcodeList)
+
+            verify(remoteDatasource, times(mockedBarcodeList.size)).getProductByBarcode(any())
+
+            assertTrue(result.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun `when searchProductsByBarcode with barcodeList should return empty list`() {
+        runBlocking {
+
+            whenever(remoteDatasource.getProductByBarcode(any())).thenReturn(Either.Left(SearchError))
+
+            val result = productRepository.searchProductsByBarcode(mockedBarcodeList)
+
+            verify(remoteDatasource, times(mockedBarcodeList.size)).getProductByBarcode(any())
+            assertTrue(result.isEmpty())
         }
     }
 

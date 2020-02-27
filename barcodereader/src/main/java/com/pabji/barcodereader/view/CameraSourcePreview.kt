@@ -12,6 +12,7 @@ import androidx.annotation.RequiresPermission
 import com.google.firebase.ml.common.FirebaseMLException
 import com.pabji.barcodereader.data.BarcodeScanningProcessor
 import com.pabji.barcodereader.data.CameraSource
+import com.pabji.barcodereader.data.NoExistCameraException
 import com.pabji.barcodereader.utils.isPortrait
 import kotlinx.android.synthetic.main.barcode_reader_view.view.*
 import java.io.IOException
@@ -45,7 +46,7 @@ internal class CameraSourcePreview(
         mCameraSource?.run {
             mStartRequested = true
             startIfReady()
-        } ?: stop()
+        } ?: throw NoExistCameraException()
     }
 
     fun stop() = mCameraSource?.stop()

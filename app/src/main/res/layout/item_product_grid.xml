@@ -10,6 +10,7 @@
             android:layout_height="150dp"
             android:contentDescription="@string/item_picture"
             android:src="@mipmap/ic_launcher"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

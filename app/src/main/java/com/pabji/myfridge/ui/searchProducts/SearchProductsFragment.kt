@@ -12,13 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pabji.domain.DomainError
 import com.pabji.domain.SearchError
 import com.pabji.myfridge.R
-import com.pabji.myfridge.model.ItemProductList
+import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
 import com.pabji.myfridge.ui.common.extensions.onTextChange
 import com.pabji.myfridge.ui.common.extensions.setVisible
-import com.pabji.myfridge.ui.common.extensions.startActivity
-import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
+import com.pabji.myfridge.utils.goToProductDetail
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_products.*
 import org.koin.android.scope.currentScope
@@ -91,9 +90,7 @@ class SearchProductsFragment : BaseFragment() {
         rv_product_list.let {
             it.adapter =
                 ProductListAdapter { product ->
-                    startActivity<ProductDetailActivity> {
-                        putExtra(ProductDetailActivity.INTENT_PRODUCT, product)
-                    }
+                    goToProductDetail(product)
                 }.apply {
                     adapter = this
                 }
@@ -109,7 +106,7 @@ class SearchProductsFragment : BaseFragment() {
         }
     }
 
-    private fun showProductList(list: List<ItemProductList>) {
+    private fun showProductList(list: List<ItemProduct>) {
         progress_bar.hide()
         adapter.productList = list
     }

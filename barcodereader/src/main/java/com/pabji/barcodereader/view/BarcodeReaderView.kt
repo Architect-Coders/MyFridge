@@ -1,10 +1,13 @@
-package com.pabji.barcodereader
+package com.pabji.barcodereader.view
 
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.FrameLayout
+import com.pabji.barcodereader.R
+import com.pabji.barcodereader.data.NoExistCameraException
 import kotlinx.android.synthetic.main.barcode_reader_view.view.*
+import java.io.IOException
 
 class BarcodeReaderView @JvmOverloads constructor(
     context: Context,
@@ -17,18 +20,17 @@ class BarcodeReaderView @JvmOverloads constructor(
     }
 
     init {
-        inflate(context, R.layout.barcode_reader_view, this)
+        inflate(
+            context,
+            R.layout.barcode_reader_view, this
+        )
         cameraPreview.create()
     }
 
+    @Throws(IOException::class, SecurityException::class, NoExistCameraException::class)
     fun start() {
-        try {
-            Log.e(TAG, "Start camera preview")
-            cameraPreview.start(graphicOverlay)
-        } catch (e: Exception) {
-            Log.e(TAG, "Unable to start camera source.", e)
-            cameraPreview.release()
-        }
+        Log.e(TAG, "Start camera preview")
+        cameraPreview.start(graphicOverlay)
     }
 
     fun setBarcodeListener(listener: (List<String>) -> Unit) =
@@ -36,5 +38,6 @@ class BarcodeReaderView @JvmOverloads constructor(
 
     fun stop() = cameraPreview.stop()
 
+    @Throws(IOException::class, SecurityException::class)
     fun destroy() = cameraPreview.release()
 }

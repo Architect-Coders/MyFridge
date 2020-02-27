@@ -9,7 +9,6 @@ interface ProductRepository {
     suspend fun saveProduct(product: Product)
     suspend fun removeProduct(product: Product)
     suspend fun searchProducts(searchTerm: String? = null): List<Product>
-    suspend fun getProductById(productId: Long): Either<DomainError, Product>
-    suspend fun getProductByBarcode(barcode: String): Either<DomainError, Product>
+    suspend fun getProductDetail(product: Product): Either<DomainError, Product>
     suspend fun searchProductsByBarcode(barcodeList: List<String>): List<Product>
 }

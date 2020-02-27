@@ -1,10 +1,12 @@
 package com.pabji.myfridge.ui.barcode
 
-import com.pabji.myfridge.model.ItemProductList
+import com.pabji.myfridge.model.ItemProduct
 
 sealed class BarcodeReaderViewState
-object Loading : BarcodeReaderViewState()
+class Content(val productList: List<ItemProduct>) : BarcodeReaderViewState()
+
 object RequestCameraPermission : BarcodeReaderViewState()
-class ProductList(val productList: List<ItemProductList>) : BarcodeReaderViewState()
-object StartCamera : BarcodeReaderViewState()
-object StopCamera : BarcodeReaderViewState()
+object CameraPermissionGranted : BarcodeReaderViewState()
+object CameraPermissionDenied : BarcodeReaderViewState()
+
+class GoToProductDetail(val product: ItemProduct) : BarcodeReaderViewState()

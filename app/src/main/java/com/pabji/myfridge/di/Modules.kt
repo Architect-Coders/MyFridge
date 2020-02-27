@@ -6,7 +6,7 @@ import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
 import com.pabji.data.repositories.ProductRepository
 import com.pabji.data.repositories.ProductRepositoryImpl
-import com.pabji.myfridge.model.ItemProductList
+import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.model.database.RoomDataSource
 import com.pabji.myfridge.model.database.RoomDatabase
 import com.pabji.myfridge.model.network.RetrofitDataSource
@@ -69,7 +69,7 @@ val scopesModule = module {
     }
 
     scope(named<ProductDetailActivity>()) {
-        viewModel { (product: ItemProductList) -> ProductDetailViewModel(product, get(), get()) }
+        viewModel { (product: ItemProduct) -> ProductDetailViewModel(product, get(), get()) }
         scoped { GetProductDetail(get()) }
         scoped { SaveProduct(get()) }
     }

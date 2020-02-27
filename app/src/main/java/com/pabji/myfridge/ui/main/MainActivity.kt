@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setFab() {
         fab.setOnClickListener { startActivity<BarcodeReaderActivity> {} }
-        //fab.setOnClickListener { startActivity<NewProductActivity> {} }
     }
 
     private fun onPagePositionSelected(position: Int) {

@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:keepScreenOn="true">
 
-    <com.pabji.barcodereader.BarcodeReaderView
+    <com.pabji.barcodereader.view.BarcodeReaderView
             android:id="@+id/barcode_reader"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -16,19 +16,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gd_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.75" />
-
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_product_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:background="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_max="120dp"
             android:visibility="gone"
             tools:visibility="visible" />
 
