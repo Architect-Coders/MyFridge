@@ -6,12 +6,16 @@ import com.pabji.domain.SearchError
 import com.pabji.myfridge.model.toItemProduct
 import com.pabji.myfridge.ui.common.BaseViewModel
 import com.pabji.usecases.SearchProductsByTerm
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchProductsViewModel(private val searchProductsByTerm: SearchProductsByTerm) :
-    BaseViewModel() {
+class SearchProductsViewModel(
+    private val searchProductsByTerm: SearchProductsByTerm,
+    uiDispatcher: CoroutineDispatcher
+) :
+    BaseViewModel(uiDispatcher) {
 
     private val _viewState = MutableLiveData<SearchProductsViewState>()
     val viewState: LiveData<SearchProductsViewState> = _viewState

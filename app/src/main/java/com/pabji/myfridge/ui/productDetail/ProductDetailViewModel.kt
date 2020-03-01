@@ -8,13 +8,15 @@ import com.pabji.myfridge.model.toProduct
 import com.pabji.myfridge.ui.common.BaseViewModel
 import com.pabji.usecases.GetProductDetail
 import com.pabji.usecases.SaveProduct
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(
     var product: ItemProduct?,
     private val getProductDetail: GetProductDetail,
-    private val saveProduct: SaveProduct
-) : BaseViewModel() {
+    private val saveProduct: SaveProduct,
+    uiDispatcher: CoroutineDispatcher
+) : BaseViewModel(uiDispatcher) {
 
     private val _viewState = MutableLiveData<ProductDetailViewState>()
     var viewState: LiveData<ProductDetailViewState> = _viewState

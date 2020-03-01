@@ -9,7 +9,7 @@ val mockedProduct = Product(barcode = "1234567", name = "ProductName")
 val mockedLocalProduct = mockedProduct.copy(existInFridge = true)
 
 val mockedLocalProductList = listOf(
-    mockedLocalProduct.copy()
+    mockedLocalProduct.copy(id = 1)
 )
 
 val mockedRemoteProductList = listOf(

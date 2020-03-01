@@ -16,4 +16,5 @@
     <string name="add_to_the_fridge">Add to the fridge</string>
     <string name="create_product_title">Crear producto</string>
     <string name="product_detail_title">Detalle</string>
+    <string name="empty_fridge">Tu nevera está vacía</string>
 </resources>

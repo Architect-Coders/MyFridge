@@ -7,10 +7,14 @@ import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.model.toItemProduct
 import com.pabji.myfridge.ui.common.BaseViewModel
 import com.pabji.usecases.SearchProductsByBarcode
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
-class BarcodeReaderViewModel(private val searchProductsByBarcode: SearchProductsByBarcode) :
-    BaseViewModel() {
+class BarcodeReaderViewModel(
+    private val searchProductsByBarcode: SearchProductsByBarcode,
+    uiDispatcher: CoroutineDispatcher
+) :
+    BaseViewModel(uiDispatcher) {
 
     private val _model = MutableLiveData<BarcodeReaderViewState>()
     val model: LiveData<BarcodeReaderViewState> = _model

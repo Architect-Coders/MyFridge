@@ -17,7 +17,8 @@ import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
 import com.pabji.myfridge.ui.common.extensions.onTextChange
 import com.pabji.myfridge.ui.common.extensions.setVisible
-import com.pabji.myfridge.utils.goToProductDetail
+import com.pabji.myfridge.ui.common.extensions.startActivity
+import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_products.*
 import org.koin.android.scope.currentScope
@@ -90,7 +91,9 @@ class SearchProductsFragment : BaseFragment() {
         rv_product_list.let {
             it.adapter =
                 ProductListAdapter { product ->
-                    goToProductDetail(product)
+                    startActivity<ProductDetailActivity> {
+                        putExtra(ProductDetailActivity.INTENT_PRODUCT, product)
+                    }
                 }.apply {
                     adapter = this
                 }

@@ -11,8 +11,9 @@ import com.pabji.myfridge.R
 import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.ui.common.PermissionRequester
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
+import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.common.extensions.visible
-import com.pabji.myfridge.utils.goToProductDetail
+import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.activity_live_preview.*
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -38,7 +39,9 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
     private fun navigate(navigationViewState: BarcodeReaderViewState?) {
 
         when (navigationViewState) {
-            is GoToProductDetail -> goToProductDetail(navigationViewState.product)
+            is GoToProductDetail -> startActivity<ProductDetailActivity> {
+                putExtra(ProductDetailActivity.INTENT_PRODUCT, navigationViewState.product)
+            }
         }
     }
 
