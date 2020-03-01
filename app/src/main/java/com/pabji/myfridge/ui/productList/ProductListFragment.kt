@@ -63,11 +63,9 @@ class ProductListFragment : BaseFragment() {
     }
 
     private fun updateProductList(viewState: UiModel) {
+        tv_emptyList.gone()
         when (viewState) {
-            is UiModel.Content -> {
-                adapter.productList = viewState.list
-                tv_emptyList.gone()
-            }
+            is UiModel.Content -> adapter.productList = viewState.list
             UiModel.EmptyList -> tv_emptyList.visible()
         }
 

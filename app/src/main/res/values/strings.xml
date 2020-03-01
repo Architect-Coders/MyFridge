@@ -17,4 +17,5 @@
     <string name="create_product_title">Crear producto</string>
     <string name="product_detail_title">Detalle</string>
     <string name="empty_fridge">Tu nevera está vacía</string>
+    <string name="search_failed">Búsqueda no encontrada</string>
 </resources>

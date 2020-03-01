@@ -4,21 +4,16 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.internal.view.SupportMenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pabji.domain.DomainError
-import com.pabji.domain.SearchError
 import com.pabji.myfridge.R
-import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
-import com.pabji.myfridge.ui.common.extensions.onTextChange
-import com.pabji.myfridge.ui.common.extensions.setVisible
-import com.pabji.myfridge.ui.common.extensions.startActivity
+import com.pabji.myfridge.ui.common.extensions.*
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
+import com.pabji.myfridge.ui.searchProducts.SearchProductsViewModel.UiModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_products.*
 import org.koin.android.scope.currentScope
@@ -48,7 +43,16 @@ class SearchProductsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setProductListView()
-        viewModel.viewState.observe(viewLifecycleOwner, Observer(::updateUI))
+        with(viewModel) {
+            model.observe(viewLifecycleOwner, Observer(::updateUI))
+            navigation.observe(viewLifecycleOwner, Observer { event ->
+                event.getContentIfNotHandled()?.let {
+                    startActivity<ProductDetailActivity> {
+                        putExtra(ProductDetailActivity.INTENT_PRODUCT, it)
+                    }
+                }
+            })
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -59,23 +63,19 @@ class SearchProductsFragment : BaseFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_toolbar_menu, menu)
 
-        activity?.run {
-            val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-            val searchMenuItem = menu.findItem(R.id.action_search) as SupportMenuItem
-            searchView = (searchMenuItem.actionView as SearchView).apply {
-                setSearchableInfo(searchManager.getSearchableInfo(componentName))
-                setOnQueryTextFocusChangeListener { _, isVisible ->
-                    bottom_navigation.setVisible(!isVisible)
-                }
-                instanceState?.run {
-                    getCharSequence(SEARCH_TERM)?.let {
-                        searchMenuItem.expandActionView()
-                        setQuery(it, false)
-                    }
-                    remove(SEARCH_TERM)
-                }
-                onTextChange { text -> viewModel.onSearch(text) }
+        val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE) as? SearchManager
+        val searchMenuItem = menu.findItem(R.id.action_search) as SupportMenuItem
+        searchView = (searchMenuItem.actionView as SearchView).apply {
+            setSearchableInfo(searchManager?.getSearchableInfo(activity?.componentName))
+            setOnQueryTextFocusChangeListener { _, isVisible ->
+                bottom_navigation.setVisible(!isVisible)
             }
+            instanceState?.getCharSequence(SEARCH_TERM)?.let {
+                searchMenuItem.expandActionView()
+                setQuery(it, false)
+            }
+            instanceState?.remove(SEARCH_TERM)
+            onTextChange { text -> viewModel.onSearch(text) }
         }
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -91,9 +91,7 @@ class SearchProductsFragment : BaseFragment() {
         rv_product_list.let {
             it.adapter =
                 ProductListAdapter { product ->
-                    startActivity<ProductDetailActivity> {
-                        putExtra(ProductDetailActivity.INTENT_PRODUCT, product)
-                    }
+                    viewModel.onProductClicked(product)
                 }.apply {
                     adapter = this
                 }
@@ -101,28 +99,21 @@ class SearchProductsFragment : BaseFragment() {
         }
     }
 
-    private fun updateUI(viewState: SearchProductsViewState?) {
+    private fun updateUI(viewState: UiModel?) {
+        tv_emptyList.gone()
+        progress_bar.hide()
+
         when (viewState) {
-            Loading -> progress_bar.show()
-            is ShowProductList -> showProductList(viewState.list)
-            is ShowError -> showError(viewState.error)
+            UiModel.Loading -> progress_bar.show()
+            is UiModel.Content -> {
+                rv_product_list.visible()
+                adapter.productList = viewState.list
+            }
+            UiModel.EmptyList -> {
+                tv_emptyList.visible()
+                rv_product_list.gone()
+            }
         }
-    }
-
-    private fun showProductList(list: List<ItemProduct>) {
-        progress_bar.hide()
-        adapter.productList = list
-    }
-
-    private fun showError(error: DomainError) {
-        progress_bar.hide()
-        when (error) {
-            is SearchError -> showSearchError()
-        }
-    }
-
-    private fun showSearchError() {
-        Toast.makeText(context, R.string.search_error_message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

@@ -36,6 +36,8 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
         productDao.remove(product.toProductEntity())
 
     override suspend fun getProductsByTerm(searchTerm: String) =
-        productDao.getProductsByTerm(searchTerm).map { it.toProduct() }
+        withContext(Dispatchers.IO) {
+            productDao.getProductsByTerm(searchTerm).map { it.toProduct() }
+        }
 
 }
