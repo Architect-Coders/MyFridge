@@ -2,6 +2,8 @@ package com.pabji.testshared
 
 import com.pabji.domain.Product
 
+val mockedBarcodeList = listOf("1234567", "7654321")
+
 val mockedProduct = Product(barcode = "1234567", name = "ProductName")
 
 val mockedLocalProduct = mockedProduct.copy(existInFridge = true)

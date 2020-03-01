@@ -2,9 +2,7 @@ package com.pabji.data.repositories
 
 import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
-import com.pabji.domain.Product
-import com.pabji.domain.fold
-import com.pabji.domain.map
+import com.pabji.domain.*
 
 class ProductRepositoryImpl(
     private val localDataSource: LocalDatasource,
@@ -28,16 +26,27 @@ class ProductRepositoryImpl(
             { remoteProductList -> localProducts + remoteProductList })
     }
 
-    override suspend fun getProductById(productId: Long) = localDataSource.getProductById(productId)
-
-    override suspend fun getProductByBarcode(barcode: String) =
-        with(localDataSource.getProductByBarcode(barcode)) {
+    override suspend fun getProductDetail(product: Product): Either<DomainError, Product> =
+        with(localDataSource.getProductById(product.id ?: 0)) {
             if (isLeft) {
-                remoteDataSource.getProductByBarcode(barcode)
+                val barcode = product.barcode
+                with(localDataSource.getProductByBarcode(barcode)) {
+                    if (isLeft) {
+                        remoteDataSource.getProductByBarcode(barcode)
+                    } else {
+                        this
+                    }
+                }
             } else {
                 this
             }
         }
+
+    override suspend fun searchProductsByBarcode(barcodeList: List<String>): List<Product> =
+        barcodeList
+            .mapNotNull {
+                remoteDataSource.getProductByBarcode(it).fold({ null }) { product -> product }
+            }
 }
 
 internal fun List<Product>.getFilteredProductsByProducts(filteredProducts: List<Product>): List<Product> {

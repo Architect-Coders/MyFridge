@@ -7,12 +7,11 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.google.gms:google-services:4.3.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
 }
 
@@ -45,7 +44,7 @@ allprojects {
                 roomRuntime        : "androidx.room:room-runtime:2.2.3",
                 roomKtx            : "androidx.room:room-ktx:2.2.3",
                 viewPager2         : "androidx.viewpager2:viewpager2:1.0.0",
-                coil               : "io.coil-kt:coil:0.8.0"
+                dexter             : 'com.karumi:dexter:6.0.2'
         ]
 
         kotlinLibs = [
@@ -62,7 +61,8 @@ allprojects {
                 retrofit              : "com.squareup.retrofit2:retrofit:2.6.0",
                 retrofitGsonConverter : "com.squareup.retrofit2:converter-gson:2.6.0",
                 okhttpLoginInterceptor: 'com.squareup.okhttp3:logging-interceptor:4.2.1',
-                koin                  : "org.koin:koin-android-viewmodel:2.0.1"
+                koin                  : "org.koin:koin-android-viewmodel:2.0.1",
+                coil                  : "io.coil-kt:coil:0.8.0"
         ]
 
         testLibs = [

@@ -31,9 +31,7 @@ class RetrofitDataSource(private val apiService: RetrofitApiService) : RemoteDat
             if (isSuccessful) {
                 body()?.product?.run {
                     Either.Right(toProduct())
-                } ?: run {
-                    Either.Left(DetailError)
-                }
+                } ?: Either.Left(DetailError)
             } else {
                 Either.Left(DetailError)
             }

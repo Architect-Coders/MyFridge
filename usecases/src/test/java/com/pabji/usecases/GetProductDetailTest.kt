@@ -30,36 +30,14 @@ class GetProductDetailTest {
     }
 
     @Test
-    fun `when invoke should return product by id`() {
+    fun `when invoke should return product`() {
         runBlocking {
             val product = mockedProduct.copy(id = 1)
-            whenever(productRepository.getProductById(1)).thenReturn(Either.Right(product))
+            whenever(productRepository.getProductDetail(product)).thenReturn(Either.Right(product))
 
             val result = getProductDetail(product)
 
-            verify(productRepository).getProductById(1)
-            assertTrue(result.isRight)
-            assertEquals(Either.Right(product), result)
-        }
-    }
-
-    @Test
-    fun `when invoke should return product by barcode`() {
-        runBlocking {
-            val mockBarcode = "123456"
-            val product = mockedProduct.copy(barcode = mockBarcode)
-            whenever(productRepository.getProductById(any())).thenReturn(Either.Left(DetailError))
-            whenever(productRepository.getProductByBarcode(mockBarcode)).thenReturn(
-                Either.Right(
-                    product
-                )
-            )
-
-            val result = getProductDetail(product)
-
-            verify(productRepository).getProductById(any())
-            verify(productRepository).getProductByBarcode(mockBarcode)
-
+            verify(productRepository).getProductDetail(product)
             assertTrue(result.isRight)
             assertEquals(Either.Right(product), result)
         }
@@ -69,17 +47,11 @@ class GetProductDetailTest {
     fun `when invoke should return error`() {
         runBlocking {
             val product = mockedProduct.copy()
-            whenever(productRepository.getProductById(any())).thenReturn(Either.Left(DetailError))
-            whenever(productRepository.getProductByBarcode(any())).thenReturn(
-                Either.Left(
-                    DetailError
-                )
-            )
+            whenever(productRepository.getProductDetail(any())).thenReturn(Either.Left(DetailError))
 
             val result = getProductDetail(product)
 
-            verify(productRepository).getProductById(any())
-            verify(productRepository).getProductByBarcode(any())
+            verify(productRepository).getProductDetail(any())
 
             assertTrue(result.isLeft)
         }

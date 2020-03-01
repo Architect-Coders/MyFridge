@@ -14,19 +14,15 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
     override suspend fun getProductListByBarcodeList(barcodeList: List<String>) =
         Either.Right(productDao.getProductsByBarcode(barcodeList).map { it.toProduct() })
 
-    override suspend fun getProductByBarcode(barcode: String) =
-        productDao.getProductByBarcode(barcode)?.run {
+    override suspend fun getProductByBarcode(barcode: String?) =
+        productDao.getProductByBarcode(barcode ?: "")?.run {
             Either.Right(toProduct())
-        } ?: run {
-            Either.Left(DetailError)
-        }
+        } ?: Either.Left(DetailError)
 
     override suspend fun getProductById(productId: Long) =
         productDao.getProductById(productId)?.run {
             Either.Right(toProduct())
-        } ?: run {
-            Either.Left(DetailError)
-        }
+        } ?: Either.Left(DetailError)
 
     override suspend fun getProductList() = productDao.getAll().map { it.toProduct() }
 

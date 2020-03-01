@@ -1,9 +1,9 @@
-package com.pabji.myfridge.ui.common.uiModels
+package com.pabji.myfridge.model
 
 import com.pabji.domain.Product
 import java.io.Serializable
 
-data class ItemProductList(
+data class ItemProduct(
     val id: Long?,
     val name: String,
     val previewUrl: String,
@@ -11,8 +11,14 @@ data class ItemProductList(
     val barcode: String
 ) : Serializable
 
-fun Product.toItemProduct(): ItemProductList =
-    ItemProductList(id, name, previewUrl, existInFridge, barcode)
+fun Product.toItemProduct(): ItemProduct =
+    ItemProduct(
+        id,
+        name,
+        previewUrl,
+        existInFridge,
+        barcode
+    )
 
-fun ItemProductList.toProduct(): Product =
+fun ItemProduct.toProduct(): Product =
     Product(id = id, name = name, barcode = barcode)

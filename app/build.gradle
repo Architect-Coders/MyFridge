@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -42,6 +42,7 @@ dependencies {
     implementation project(":data")
     implementation project(":domain")
     implementation project(":usecases")
+    implementation project(":barcodereader")
 
     implementation androidLibs.values()
     implementation kotlinLibs.values()

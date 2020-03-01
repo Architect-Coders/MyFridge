@@ -7,10 +7,10 @@ import androidx.lifecycle.Observer
 import coil.api.load
 import coil.size.Scale
 import com.pabji.myfridge.R
+import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.ui.common.extensions.gone
 import com.pabji.myfridge.ui.common.extensions.setVisible
 import com.pabji.myfridge.ui.common.extensions.visible
-import com.pabji.myfridge.ui.common.uiModels.ItemProductList
 import kotlinx.android.synthetic.main.activity_product_detail.*
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -19,7 +19,7 @@ import org.koin.core.parameter.parametersOf
 class ProductDetailActivity : AppCompatActivity() {
 
     private val viewModel: ProductDetailViewModel by currentScope.viewModel(this) {
-        parametersOf(intent.getSerializableExtra(INTENT_PRODUCT) as? ItemProductList)
+        parametersOf(intent.getSerializableExtra(INTENT_PRODUCT) as? ItemProduct)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

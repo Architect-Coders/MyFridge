@@ -6,11 +6,13 @@ import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
 import com.pabji.data.repositories.ProductRepository
 import com.pabji.data.repositories.ProductRepositoryImpl
+import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.model.database.RoomDataSource
 import com.pabji.myfridge.model.database.RoomDatabase
 import com.pabji.myfridge.model.network.RetrofitDataSource
 import com.pabji.myfridge.model.network.api.RetrofitApiClient
-import com.pabji.myfridge.ui.common.uiModels.ItemProductList
+import com.pabji.myfridge.ui.barcode.BarcodeReaderActivity
+import com.pabji.myfridge.ui.barcode.BarcodeReaderViewModel
 import com.pabji.myfridge.ui.newProduct.NewProductActivity
 import com.pabji.myfridge.ui.newProduct.NewProductViewModel
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
@@ -19,10 +21,7 @@ import com.pabji.myfridge.ui.productList.ProductListFragment
 import com.pabji.myfridge.ui.productList.ProductListViewModel
 import com.pabji.myfridge.ui.searchProducts.SearchProductsFragment
 import com.pabji.myfridge.ui.searchProducts.SearchProductsViewModel
-import com.pabji.usecases.GetMyProducts
-import com.pabji.usecases.GetProductDetail
-import com.pabji.usecases.SaveProduct
-import com.pabji.usecases.SearchProductsByTerm
+import com.pabji.usecases.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.android.viewmodel.dsl.viewModel
@@ -70,8 +69,13 @@ val scopesModule = module {
     }
 
     scope(named<ProductDetailActivity>()) {
-        viewModel { (product: ItemProductList) -> ProductDetailViewModel(product, get(), get()) }
+        viewModel { (product: ItemProduct) -> ProductDetailViewModel(product, get(), get()) }
         scoped { GetProductDetail(get()) }
         scoped { SaveProduct(get()) }
+    }
+
+    scope(named<BarcodeReaderActivity>()) {
+        viewModel { BarcodeReaderViewModel(get()) }
+        scoped { SearchProductsByBarcode(get()) }
     }
 }

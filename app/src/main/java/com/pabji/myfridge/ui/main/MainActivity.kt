@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.pabji.myfridge.R
+import com.pabji.myfridge.ui.barcode.BarcodeReaderActivity
 import com.pabji.myfridge.ui.common.extensions.startActivity
-import com.pabji.myfridge.ui.newProduct.NewProductActivity
 import com.pabji.myfridge.ui.productList.ProductListFragment
 import com.pabji.myfridge.ui.searchProducts.SearchProductsFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setFab() {
-        fab.setOnClickListener { startActivity<NewProductActivity> {} }
+        fab.setOnClickListener { startActivity<BarcodeReaderActivity> {} }
     }
 
     private fun onPagePositionSelected(position: Int) {
