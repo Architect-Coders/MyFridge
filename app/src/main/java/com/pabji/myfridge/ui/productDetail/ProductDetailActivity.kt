@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import coil.api.load
 import coil.size.Scale
+import com.pabji.domain.Product
 import com.pabji.myfridge.R
 import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.ui.common.extensions.gone
 import com.pabji.myfridge.ui.common.extensions.setVisible
 import com.pabji.myfridge.ui.common.extensions.visible
+import com.pabji.myfridge.ui.productDetail.ProductDetailViewModel.UiModel
 import kotlinx.android.synthetic.main.activity_product_detail.*
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -27,63 +29,73 @@ class ProductDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_product_detail)
         setTitle(R.string.product_detail_title)
 
-        viewModel.viewState.observe(this, Observer(::updateUI))
-
+        viewModel.model.observe(this, Observer(::updateUI))
         btn_add.setOnClickListener { viewModel.onClickButtonAdd() }
     }
 
-    private fun updateUI(viewState: ProductDetailViewState?) {
+    private fun updateUI(viewState: UiModel?) {
         when (viewState) {
-            is ShowProduct -> showProduct(viewState.product)
-            is ShowSaved -> showSaved(viewState.product)
-            ShowError -> showError()
+            UiModel.Loading -> {
+            }
+            is UiModel.Content -> showProduct(viewState.product)
+            is UiModel.ProductSaved -> showSaved(viewState.product)
+            UiModel.Error -> showError()
         }
     }
 
-    private fun showSaved(product: ProductDetail) {
+    private fun showSaved(product: Product) {
         Toast.makeText(this, "${product.name} has been saved in your fridge", Toast.LENGTH_SHORT)
             .show()
         btn_add.gone()
     }
 
-    private fun showProduct(
-        product: ProductDetail
-    ) {
-        btn_add.setVisible(!product.existInFridge)
+    private fun showProduct(product: Product) {
         product.run {
-            iv_product_image.load(imageUrl) {
-                scale(Scale.FILL)
-                crossfade(true)
-                error(R.mipmap.ic_launcher)
-            }
+            btn_add.setVisible(!existInFridge)
+            setProductImage(imageUrl)
+            setProductName(name)
+            setGenericName(genericName)
+            setIngredientsText(ingredientsText)
+            setCategories(categories)
+            setStores(stores)
+        }
+    }
 
-            tv_product_name.text = name
+    private fun setStores(stores: String) {
+        if (stores.isNotEmpty()) {
+            tv_stores.text = stores
+            ll_stores.visible()
+        }
+    }
 
-            genericName.let {
-                tv_generic_name.run {
-                    text = it
-                    visible()
-                }
-            }
+    private fun setCategories(categories: String) {
+        if (categories.isNotEmpty()) {
+            tv_categories.text = categories
+            ll_categories.visible()
+        }
+    }
 
-            ingredientsText.let {
-                tv_ingredients.text = it
-                ll_ingredients.visible()
-            }
+    private fun setIngredientsText(ingredientsText: String) {
+        tv_ingredients.text = ingredientsText
+        ll_ingredients.visible()
+    }
 
-            categories.let {
-                if (it.isNotEmpty()) {
-                    tv_categories.text = it.joinToString(", ")
-                    ll_categories.visible()
-                }
-            }
+    private fun setGenericName(genericName: String) {
+        tv_generic_name.run {
+            text = genericName
+            visible()
+        }
+    }
 
-            stores.let {
-                if (it.isNotEmpty()) {
-                    tv_stores.text = it.joinToString(", ")
-                    ll_stores.visible()
-                }
-            }
+    private fun setProductName(name: String) {
+        tv_product_name.text = name
+    }
+
+    private fun setProductImage(imageUrl: String) {
+        iv_product_image.load(imageUrl) {
+            scale(Scale.FILL)
+            crossfade(true)
+            error(R.mipmap.ic_launcher)
         }
     }
 

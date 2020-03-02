@@ -6,6 +6,8 @@ import com.pabji.domain.Either
 import com.pabji.domain.Product
 import com.pabji.myfridge.model.database.entities.toProduct
 import com.pabji.myfridge.model.database.entities.toProductEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RoomDataSource(database: RoomDatabase) : LocalDatasource {
 
@@ -24,7 +26,8 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
             Either.Right(toProduct())
         } ?: Either.Left(DetailError)
 
-    override suspend fun getProductList() = productDao.getAll().map { it.toProduct() }
+    override suspend fun getProductList() =
+        withContext(Dispatchers.IO) { productDao.getAll().map { it.toProduct() } }
 
     override suspend fun saveProduct(product: Product) =
         productDao.insert(product.toProductEntity())
@@ -33,6 +36,8 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
         productDao.remove(product.toProductEntity())
 
     override suspend fun getProductsByTerm(searchTerm: String) =
-        productDao.getProductsByTerm(searchTerm).map { it.toProduct() }
+        withContext(Dispatchers.IO) {
+            productDao.getProductsByTerm(searchTerm).map { it.toProduct() }
+        }
 
 }

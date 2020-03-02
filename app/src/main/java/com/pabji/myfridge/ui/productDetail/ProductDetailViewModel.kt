@@ -2,46 +2,56 @@ package com.pabji.myfridge.ui.productDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pabji.domain.Product
 import com.pabji.domain.fold
 import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.model.toProduct
 import com.pabji.myfridge.ui.common.BaseViewModel
 import com.pabji.usecases.GetProductDetail
 import com.pabji.usecases.SaveProduct
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(
-    var product: ItemProduct?,
+    var itemProduct: ItemProduct?,
     private val getProductDetail: GetProductDetail,
-    private val saveProduct: SaveProduct
-) : BaseViewModel() {
+    private val saveProduct: SaveProduct,
+    uiDispatcher: CoroutineDispatcher
+) : BaseViewModel(uiDispatcher) {
 
-    private val _viewState = MutableLiveData<ProductDetailViewState>()
-    var viewState: LiveData<ProductDetailViewState> = _viewState
+    private val _model = MutableLiveData<UiModel>()
+    val model: LiveData<UiModel>
+        get() {
+            if (_model.value == null) loadProduct(itemProduct)
+            return _model
+        }
 
-    init {
-        product?.let { loadProduct(it) }
+    sealed class UiModel {
+        object Loading : UiModel()
+        data class Content(val product: Product) : UiModel()
+        data class ProductSaved(val product: Product) : UiModel()
+        object Error : UiModel()
     }
 
-    private fun loadProduct(product: ItemProduct) {
+    private fun loadProduct(product: ItemProduct?) {
         launch {
-            _viewState.value = Loading
-            with(product) {
+            _model.value = UiModel.Loading
+            _model.value = product?.run {
                 getProductDetail(toProduct()).fold({
-                    _viewState.value = ShowError
+                    UiModel.Error
                 }, {
-                    _viewState.value = ShowProduct(it.toProductDetail())
+                    UiModel.Content(it)
                 })
-            }
+            } ?: UiModel.Error
         }
     }
 
     fun onClickButtonAdd() {
         launch {
-            when (val value = viewState.value) {
-                is ShowProduct -> {
-                    saveProduct(value.product.toProduct())
-                    _viewState.value = ShowSaved(value.product)
+            when (val value = _model.value) {
+                is UiModel.Content -> {
+                    saveProduct(value.product)
+                    _model.value = UiModel.ProductSaved(value.product)
                 }
             }
         }
