@@ -6,6 +6,7 @@ import com.pabji.domain.Product
 import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.model.toItemProduct
 import com.pabji.myfridge.ui.common.BaseViewModel
+import com.pabji.myfridge.ui.common.Event
 import com.pabji.usecases.SearchProductsByBarcode
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -16,37 +17,40 @@ class BarcodeReaderViewModel(
 ) :
     BaseViewModel(uiDispatcher) {
 
-    private val _model = MutableLiveData<BarcodeReaderViewState>()
-    val model: LiveData<BarcodeReaderViewState> = _model
+    private val _model = MutableLiveData<UiModel>()
+    val model: LiveData<UiModel> = _model
 
-    private val _permissionModel = MutableLiveData<BarcodeReaderViewState>()
-    val permissionModel: LiveData<BarcodeReaderViewState> = _permissionModel
-
-    private val _navigationModel = MutableLiveData<BarcodeReaderViewState>()
-    val navigationModel: LiveData<BarcodeReaderViewState> = _navigationModel
-
+    private val _navigation = MutableLiveData<Event<ItemProduct>>()
+    val navigation: LiveData<Event<ItemProduct>> = _navigation
 
     private var barcodeListDetected = setOf<Product>()
+
+    sealed class UiModel {
+        data class Content(val productList: List<ItemProduct>) : UiModel()
+        object RequestCameraPermission : UiModel()
+        object StartCamera : UiModel()
+        object StopCamera : UiModel()
+    }
+
+    fun refresh() {
+        _model.value = UiModel.RequestCameraPermission
+    }
 
     fun onBarcodeDetected(barcodeList: List<String>) {
         launch {
             barcodeListDetected = searchProductsByBarcode(barcodeListDetected, barcodeList.toSet())
-            _model.value = Content(barcodeListDetected.map { it.toItemProduct() })
+            _model.value = UiModel.Content(barcodeListDetected.map { it.toItemProduct() })
         }
     }
 
     fun onCameraPermissionRequested(permissionGranted: Boolean) {
-        _permissionModel.value = when (permissionGranted) {
-            true -> CameraPermissionGranted
-            false -> CameraPermissionDenied
+        _model.value = when (permissionGranted) {
+            true -> UiModel.StartCamera
+            false -> UiModel.StopCamera
         }
     }
 
-    fun checkPermissions() {
-        _permissionModel.value = RequestCameraPermission
-    }
-
     fun onProductClicked(product: ItemProduct) {
-        _navigationModel.value = GoToProductDetail(product)
+        _navigation.value = Event(product)
     }
 }
