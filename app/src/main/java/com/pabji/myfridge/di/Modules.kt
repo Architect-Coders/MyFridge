@@ -13,8 +13,6 @@ import com.pabji.myfridge.model.network.RetrofitDataSource
 import com.pabji.myfridge.model.network.api.RetrofitApiClient
 import com.pabji.myfridge.ui.barcode.BarcodeReaderActivity
 import com.pabji.myfridge.ui.barcode.BarcodeReaderViewModel
-import com.pabji.myfridge.ui.newProduct.NewProductActivity
-import com.pabji.myfridge.ui.newProduct.NewProductViewModel
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import com.pabji.myfridge.ui.productDetail.ProductDetailViewModel
 import com.pabji.myfridge.ui.productList.ProductListFragment
@@ -64,11 +62,6 @@ val scopesModule = module {
     scope(named<SearchProductsFragment>()) {
         viewModel { SearchProductsViewModel(get(), get()) }
         scoped { SearchProductsByTerm(get()) }
-    }
-
-    scope(named<NewProductActivity>()) {
-        viewModel { NewProductViewModel(get(), get()) }
-        scoped { SaveProduct(get()) }
     }
 
     scope(named<ProductDetailActivity>()) {
