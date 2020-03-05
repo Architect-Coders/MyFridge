@@ -106,5 +106,4 @@ class ProductDetailActivity : AppCompatActivity() {
     companion object {
         const val INTENT_PRODUCT = "intent_product"
     }
-
 }

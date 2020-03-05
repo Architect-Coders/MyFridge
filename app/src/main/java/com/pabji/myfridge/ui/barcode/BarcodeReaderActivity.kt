@@ -34,7 +34,7 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
         initRecycler()
         viewModel.model.observe(this, Observer(::updateUi))
         viewModel.navigation.observe(this, Observer { event ->
-            event.getContentIfNotHandled()?.let {
+            event.getContent()?.let {
                 startActivity<ProductDetailActivity> {
                     putExtra(ProductDetailActivity.INTENT_PRODUCT, it)
                 }
@@ -55,7 +55,6 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
             it.adapter =
                 ProductListAdapter { product ->
                     viewModel.onProductClicked(product)
-
                 }.apply {
                     adapter = this
                 }

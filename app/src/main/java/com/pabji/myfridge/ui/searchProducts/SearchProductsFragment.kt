@@ -46,7 +46,7 @@ class SearchProductsFragment : BaseFragment() {
         with(viewModel) {
             model.observe(viewLifecycleOwner, Observer(::updateUI))
             navigation.observe(viewLifecycleOwner, Observer { event ->
-                event.getContentIfNotHandled()?.let {
+                event.getContent()?.let {
                     startActivity<ProductDetailActivity> {
                         putExtra(ProductDetailActivity.INTENT_PRODUCT, it)
                     }

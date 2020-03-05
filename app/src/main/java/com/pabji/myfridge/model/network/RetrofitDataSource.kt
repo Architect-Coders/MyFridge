@@ -25,7 +25,6 @@ class RetrofitDataSource(private val apiService: RetrofitApiService) : RemoteDat
             }
         }
 
-
     override suspend fun getProductByBarcode(barcode: String) =
         with(apiService.getProductDetailById(barcode, DETAIL_FIELDS.joinToString(","))) {
             if (isSuccessful) {

@@ -62,5 +62,4 @@ class ProductListIntegrationTest : AutoCloseKoinTest() {
                 mockedLocalProductList.map { it.toItemProduct() })
         )
     }
-
 }

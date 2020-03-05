@@ -36,5 +36,4 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
         withContext(Dispatchers.IO) {
             productDao.getProductsByTerm(searchTerm).map { it.toProduct() }
         }
-
 }
