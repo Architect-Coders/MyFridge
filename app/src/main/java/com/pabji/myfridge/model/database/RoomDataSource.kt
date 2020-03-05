@@ -13,9 +13,6 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
 
     private val productDao = database.productDao()
 
-    override suspend fun getProductListByBarcodeList(barcodeList: List<String>) =
-        Either.Right(productDao.getProductsByBarcode(barcodeList).map { it.toProduct() })
-
     override suspend fun getProductByBarcode(barcode: String?) =
         productDao.getProductByBarcode(barcode ?: "")?.run {
             Either.Right(toProduct())
