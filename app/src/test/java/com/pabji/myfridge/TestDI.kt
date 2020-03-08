@@ -30,14 +30,18 @@ class FakeLocalDataSource : LocalDatasource {
         if (isError) {
             Either.Left(DetailError)
         } else {
-            Either.Right(productList.first { it.barcode == barcode })
+            productList.find { it.barcode == barcode }?.run {
+                Either.Right(this)
+            } ?: Either.Left(DetailError)
         }
 
     override suspend fun getProductById(productId: Long): Either<DomainError, Product> =
         if (isError) {
             Either.Left(DetailError)
         } else {
-            Either.Right(productList.first { it.id == productId })
+            productList.find { it.id == productId }?.run {
+                Either.Right(this)
+            } ?: Either.Left(DetailError)
         }
 
     override suspend fun getProductList(): List<Product> = productList
@@ -74,6 +78,8 @@ class FakeRemoteDataSource : RemoteDatasource {
         if (isError) {
             Either.Left(DetailError)
         } else {
-            Either.Right(productList.first { it.barcode == barcode })
+            productList.find { it.barcode == barcode }?.run {
+                Either.Right(this)
+            } ?: Either.Left(DetailError)
         }
 }

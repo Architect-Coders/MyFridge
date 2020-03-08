@@ -69,7 +69,7 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun `with searh term, product list should be shown`() {
+    fun `with search term, product list should be shown`() {
         remoteDataSource.productList = mockedRemoteProductList.toMutableList()
         localDataSource.productList = mockedLocalProductList.toMutableList()
         vm.model.observeForever(uiModelObserver)
@@ -79,7 +79,7 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun `with searh term and remote returns error, empty product list should be shown`() {
+    fun `with search term and remote returns error, empty product list should be shown`() {
         remoteDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("Product")
@@ -87,7 +87,7 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun `with searh term, remote returns error and local have products, local product list should be shown`() {
+    fun `with search term, remote returns error and local have products, local product list should be shown`() {
         remoteDataSource.isError = true
         localDataSource.productList = mockedLocalProductList.toMutableList()
         vm.model.observeForever(uiModelObserver)

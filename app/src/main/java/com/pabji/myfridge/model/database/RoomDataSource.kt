@@ -14,23 +14,31 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
     private val productDao = database.productDao()
 
     override suspend fun getProductByBarcode(barcode: String?) =
-        productDao.getProductByBarcode(barcode ?: "")?.run {
-            Either.Right(toProduct())
-        } ?: Either.Left(DetailError)
+        withContext(Dispatchers.IO) {
+            productDao.getProductByBarcode(barcode ?: "")?.run {
+                Either.Right(toProduct())
+            } ?: Either.Left(DetailError)
+        }
 
     override suspend fun getProductById(productId: Long) =
-        productDao.getProductById(productId)?.run {
-            Either.Right(toProduct())
-        } ?: Either.Left(DetailError)
+        withContext(Dispatchers.IO) {
+            productDao.getProductById(productId)?.run {
+                Either.Right(toProduct())
+            } ?: Either.Left(DetailError)
+        }
 
     override suspend fun getProductList() =
         withContext(Dispatchers.IO) { productDao.getAll().map { it.toProduct() } }
 
     override suspend fun saveProduct(product: Product) =
-        productDao.insert(product.toProductEntity())
+        withContext(Dispatchers.IO) {
+            productDao.insert(product.toProductEntity())
+        }
 
     override suspend fun removeProduct(product: Product) =
-        productDao.remove(product.toProductEntity())
+        withContext(Dispatchers.IO) {
+            productDao.remove(product.toProductEntity())
+        }
 
     override suspend fun getProductsByTerm(searchTerm: String) =
         withContext(Dispatchers.IO) {
