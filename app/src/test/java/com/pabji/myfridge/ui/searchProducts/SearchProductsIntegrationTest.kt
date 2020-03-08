@@ -55,7 +55,7 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `when init, remote random list should be shown`() {
-        remoteDataSource.productList = mockedRemoteProductList.toMutableList()
+        localDataSource.reset()
         vm.model.observeForever(uiModelObserver)
         verify(uiModelObserver)
             .onChanged(UiModel.Content(mockedRemoteProductList.map { it.toItemProduct() }))
@@ -63,6 +63,8 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `when empty term sended, empty list should be shown`() {
+        localDataSource.reset()
+        remoteDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("")
         verify(uiModelObserver, times(2)).onChanged(UiModel.EmptyList)
@@ -70,8 +72,6 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `with search term, product list should be shown`() {
-        remoteDataSource.productList = mockedRemoteProductList.toMutableList()
-        localDataSource.productList = mockedLocalProductList.toMutableList()
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("Product")
         verify(uiModelObserver, times(2))
@@ -80,6 +80,7 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `with search term and remote returns error, empty product list should be shown`() {
+        localDataSource.reset()
         remoteDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("Product")
@@ -89,7 +90,6 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
     @Test
     fun `with search term, remote returns error and local have products, local product list should be shown`() {
         remoteDataSource.isError = true
-        localDataSource.productList = mockedLocalProductList.toMutableList()
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("Product")
         verify(uiModelObserver, times(2))

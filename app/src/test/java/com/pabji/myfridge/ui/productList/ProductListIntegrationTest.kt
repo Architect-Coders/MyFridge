@@ -46,6 +46,7 @@ class ProductListIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `when local is empty, should show empty product list state`() {
+        localDataSource.reset()
         vm.model.observeForever(uiModelObserver)
         vm.updateData()
         verify(uiModelObserver).onChanged(ProductListViewModel.UiModel.EmptyList)
@@ -54,7 +55,6 @@ class ProductListIntegrationTest : AutoCloseKoinTest() {
     @Test
     fun `when local have products, should show product list state`() {
         vm.model.observeForever(uiModelObserver)
-        localDataSource.productList = mockedLocalProductList.toMutableList()
         vm.updateData()
         verify(uiModelObserver).onChanged(
             ProductListViewModel.UiModel.Content(

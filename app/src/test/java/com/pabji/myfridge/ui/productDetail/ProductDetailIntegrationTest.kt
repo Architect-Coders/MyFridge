@@ -10,9 +10,7 @@ import com.pabji.myfridge.FakeRemoteDataSource
 import com.pabji.myfridge.initMockedDi
 import com.pabji.myfridge.model.toItemProduct
 import com.pabji.testshared.mockedLocalProduct
-import com.pabji.testshared.mockedLocalProductList
 import com.pabji.testshared.mockedProduct
-import com.pabji.testshared.mockedRemoteProductList
 import com.pabji.usecases.GetProductDetail
 import com.pabji.usecases.SaveProduct
 import org.junit.Before
@@ -58,14 +56,13 @@ class ProductDetailIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `when local product exist, product is shown`() {
-        localDataSource.productList = mockedLocalProductList.toMutableList()
         vm.model.observeForever(uiModelObserver)
         verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.Content(mockedLocalProduct))
     }
 
     @Test
     fun `when local product doesnt exist, remote product is shown`() {
-        remoteDataSource.productList = mockedRemoteProductList.toMutableList()
+        localDataSource.reset()
         vm.model.observeForever(uiModelObserver)
         verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.Content(mockedProduct))
     }
@@ -80,7 +77,7 @@ class ProductDetailIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `when save product, product saved state is shown`() {
-        remoteDataSource.productList = mockedRemoteProductList.toMutableList()
+        localDataSource.reset()
         vm.model.observeForever(uiModelObserver)
         vm.onClickButtonAdd()
         verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.ProductSaved(mockedProduct))

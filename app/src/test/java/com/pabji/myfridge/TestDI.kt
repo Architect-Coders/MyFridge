@@ -4,6 +4,8 @@ import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
 import com.pabji.domain.*
 import com.pabji.myfridge.di.dataModule
+import com.pabji.testshared.mockedLocalProductList
+import com.pabji.testshared.mockedRemoteProductList
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -23,8 +25,12 @@ private val mockedAppModule = module {
 
 class FakeLocalDataSource : LocalDatasource {
 
-    var productList: MutableList<Product> = mutableListOf()
+    private var productList: MutableList<Product> = mockedLocalProductList.toMutableList()
     var isError: Boolean = false
+
+    fun reset() {
+        productList.clear()
+    }
 
     override suspend fun getProductByBarcode(barcode: String?): Either<DomainError, Product> =
         if (isError) {
@@ -62,7 +68,7 @@ class FakeLocalDataSource : LocalDatasource {
 
 class FakeRemoteDataSource : RemoteDatasource {
 
-    var productList: MutableList<Product> = mutableListOf()
+    private var productList: MutableList<Product> = mockedRemoteProductList.toMutableList()
     var isError: Boolean = false
 
     override suspend fun searchProducts(searchTerm: String?): Either<DomainError, List<Product>> =
