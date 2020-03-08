@@ -23,7 +23,6 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class SearchProductsViewModelTest {
 
-
     @get:Rule
     val rule = InstantTaskExecutorRule()
 

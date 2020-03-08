@@ -40,9 +40,8 @@ class ProductListIntegrationTest : AutoCloseKoinTest() {
         }
 
         initMockedDi(vmModule)
-        vm = get()
-
         localDataSource = get<LocalDatasource>() as FakeLocalDataSource
+        vm = get()
     }
 
     @Test

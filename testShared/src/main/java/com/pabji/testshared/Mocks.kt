@@ -18,6 +18,6 @@ val mockedRemoteProductList = listOf(
 )
 
 val mockedFilteredProducts = listOf(
-    mockedLocalProduct.copy(),
+    mockedLocalProduct.copy(1),
     mockedProduct.copy(name = "Product2", barcode = "7654321")
 )
