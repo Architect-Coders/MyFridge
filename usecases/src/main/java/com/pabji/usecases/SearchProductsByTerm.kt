@@ -8,5 +8,4 @@ class SearchProductsByTerm(private val productRepository: ProductRepository) {
     suspend operator fun invoke(
         searchTerm: String
     ): List<Product> = productRepository.searchProducts(searchTerm)
-
 }

@@ -37,5 +37,4 @@ class GetMyProductsTest {
             Assert.assertEquals(productList, result)
         }
     }
-
 }

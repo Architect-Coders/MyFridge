@@ -5,7 +5,6 @@ import com.pabji.domain.Either
 import com.pabji.domain.Product
 
 interface LocalDatasource {
-    suspend fun getProductListByBarcodeList(barcodeList: List<String>): Either<DomainError, List<Product>>
     suspend fun getProductByBarcode(barcode: String?): Either<DomainError, Product>
     suspend fun getProductById(productId: Long): Either<DomainError, Product>
     suspend fun getProductList(): List<Product>

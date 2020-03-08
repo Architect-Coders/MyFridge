@@ -1,10 +1,8 @@
 package com.pabji.domain
 
 sealed class Either<out L, out R> {
-    //Failure
     data class Left<out L>(val value: L) : Either<L, Nothing>()
 
-    //Success
     data class Right<out R>(val value: R) : Either<Nothing, R>()
 
     val isRight get() = this is Right<R>

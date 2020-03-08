@@ -41,5 +41,4 @@ class ProductListViewModel(
     fun onProductClicked(product: ItemProduct) {
         _navigation.value = Event(product)
     }
-
 }

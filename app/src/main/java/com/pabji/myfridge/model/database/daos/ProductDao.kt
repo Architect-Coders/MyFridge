@@ -15,9 +15,6 @@ interface ProductDao {
     @Query("SELECT * FROM products WHERE barcode = :barcode")
     suspend fun getProductByBarcode(barcode: String): ProductEntity?
 
-    @Query("SELECT * FROM products WHERE barcode IN(:barcodeList)")
-    suspend fun getProductsByBarcode(barcodeList: List<String>): List<ProductEntity>
-
     @Query("SELECT * FROM products WHERE name LIKE :searchTerm")
     suspend fun getProductsByTerm(searchTerm: String): List<ProductEntity>
 

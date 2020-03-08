@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(
-    var itemProduct: ItemProduct?,
+    private var itemProduct: ItemProduct?,
     private val getProductDetail: GetProductDetail,
     private val saveProduct: SaveProduct,
     uiDispatcher: CoroutineDispatcher

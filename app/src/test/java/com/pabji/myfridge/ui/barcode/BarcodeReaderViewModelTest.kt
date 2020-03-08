@@ -45,58 +45,44 @@ class BarcodeReaderViewModelTest {
 
     @Test
     fun `while observing Model LiveData and refresh, request camera permission`() {
-        runBlocking {
-            vm.model.observeForever(uiModelObserver)
-            vm.refresh()
-            verify(uiModelObserver).onChanged(BarcodeReaderViewModel.UiModel.RequestCameraPermission)
-        }
+        vm.model.observeForever(uiModelObserver)
+        vm.refresh()
+        verify(uiModelObserver).onChanged(BarcodeReaderViewModel.UiModel.RequestCameraPermission)
     }
 
     @Test
     fun `after request camera permission and permission granted, start camera`() {
-        runBlocking {
-            vm.model.observeForever(uiModelObserver)
-            vm.onCameraPermissionRequested(true)
-            verify(uiModelObserver).onChanged(BarcodeReaderViewModel.UiModel.StartCamera)
-        }
+        vm.model.observeForever(uiModelObserver)
+        vm.onCameraPermissionRequested(true)
+        verify(uiModelObserver).onChanged(BarcodeReaderViewModel.UiModel.StartCamera)
     }
 
     @Test
     fun `after request camera permission and permission denied, stop camera`() {
-        runBlocking {
-            vm.model.observeForever(uiModelObserver)
-            vm.onCameraPermissionRequested(false)
-            verify(uiModelObserver).onChanged(BarcodeReaderViewModel.UiModel.StopCamera)
-        }
+        vm.model.observeForever(uiModelObserver)
+        vm.onCameraPermissionRequested(false)
+        verify(uiModelObserver).onChanged(BarcodeReaderViewModel.UiModel.StopCamera)
     }
 
     @Test
     fun `while observing Model LiveData and barcode list detected by camera, product list is shown`() {
         runBlocking {
             val mockedItemProductList = mockedRemoteProductList.map { it.toItemProduct() }
-            whenever(
-                searchProductsByBarcode(
-                    any(),
-                    any()
-                )
-            ).thenReturn(mockedRemoteProductList.toSet())
+            whenever(searchProductsByBarcode(any(), any()))
+                .thenReturn(mockedRemoteProductList.toSet())
             vm.model.observeForever(uiModelObserver)
             vm.onBarcodeDetected(mockedBarcodeList)
             verify(uiModelObserver).onChanged(
-                BarcodeReaderViewModel.UiModel.Content(
-                    mockedItemProductList
-                )
+                BarcodeReaderViewModel.UiModel.Content(mockedItemProductList)
             )
         }
     }
 
     @Test
     fun `while observing Navigation LiveData and barcode list detected by camera, product list is shown`() {
-        runBlocking {
-            val mockedItemProduct = mockedProduct.toItemProduct()
-            vm.navigation.observeForever(uiNavigationObserver)
-            vm.onProductClicked(mockedItemProduct)
-            verify(uiNavigationObserver).onChanged(Event(mockedItemProduct))
-        }
+        val mockedItemProduct = mockedProduct.toItemProduct()
+        vm.navigation.observeForever(uiNavigationObserver)
+        vm.onProductClicked(mockedItemProduct)
+        verify(uiNavigationObserver).onChanged(Event(mockedItemProduct))
     }
 }

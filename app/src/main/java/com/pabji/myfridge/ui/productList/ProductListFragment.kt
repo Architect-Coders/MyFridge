@@ -43,7 +43,7 @@ class ProductListFragment : BaseFragment() {
         with(viewModel) {
             model.observe(viewLifecycleOwner, Observer(::updateProductList))
             navigation.observe(viewLifecycleOwner, Observer { event ->
-                event.getContentIfNotHandled()?.let {
+                event.getContent()?.let {
                     startActivity<ProductDetailActivity> {
                         putExtra(ProductDetailActivity.INTENT_PRODUCT, it)
                     }
@@ -54,11 +54,13 @@ class ProductListFragment : BaseFragment() {
 
     private fun setProductListView() {
         rv_product_list.let {
-            adapter = ProductListAdapter(ProductListAdapter.RecyclerType.GRID) { product ->
+            adapter = ProductListAdapter(
+                ProductListAdapter.RecyclerType.GRID
+            ) { product ->
                 viewModel.onProductClicked(product)
             }
             it.adapter = adapter
-            it.layoutManager = GridLayoutManager(context, 3)
+            it.layoutManager = GridLayoutManager(context, GRID_SPAN_COUNT)
         }
     }
 
@@ -68,10 +70,10 @@ class ProductListFragment : BaseFragment() {
             is UiModel.Content -> adapter.productList = viewState.list
             UiModel.EmptyList -> tv_emptyList.visible()
         }
-
     }
 
     companion object {
+        const val GRID_SPAN_COUNT = 3
         fun newInstance() = ProductListFragment()
     }
 }
