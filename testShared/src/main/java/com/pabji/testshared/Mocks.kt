@@ -6,7 +6,7 @@ val mockedBarcodeList = listOf("1234567", "7654321")
 
 val mockedProduct = Product(barcode = "1234567", name = "ProductName")
 
-val mockedLocalProduct = mockedProduct.copy(existInFridge = true)
+val mockedLocalProduct = mockedProduct.copy(id = 1, existInFridge = true)
 
 val mockedLocalProductList = listOf(
     mockedLocalProduct.copy()
@@ -18,6 +18,6 @@ val mockedRemoteProductList = listOf(
 )
 
 val mockedFilteredProducts = listOf(
-    mockedLocalProduct.copy(),
+    mockedLocalProduct.copy(1),
     mockedProduct.copy(name = "Product2", barcode = "7654321")
 )

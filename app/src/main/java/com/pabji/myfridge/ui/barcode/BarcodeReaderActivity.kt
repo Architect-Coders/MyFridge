@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pabji.myfridge.R
 import com.pabji.myfridge.model.ItemProduct
+import com.pabji.myfridge.ui.barcode.BarcodeReaderViewModel.UiModel
 import com.pabji.myfridge.ui.common.PermissionRequester
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
+import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.common.extensions.visible
-import com.pabji.myfridge.utils.goToProductDetail
+import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.activity_live_preview.*
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -31,26 +33,13 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
         barcode_reader.setBarcodeListener(viewModel::onBarcodeDetected)
         initRecycler()
         viewModel.model.observe(this, Observer(::updateUi))
-        viewModel.permissionModel.observe(this, Observer(::updateUiPermission))
-        viewModel.navigationModel.observe(this, Observer(::navigate))
-    }
-
-    private fun navigate(navigationViewState: BarcodeReaderViewState?) {
-
-        when (navigationViewState) {
-            is GoToProductDetail -> goToProductDetail(navigationViewState.product)
-        }
-    }
-
-    private fun updateUiPermission(barcodeReaderViewState: BarcodeReaderViewState?) {
-
-        when (barcodeReaderViewState) {
-            RequestCameraPermission -> cameraPermissionRequester.request(viewModel::onCameraPermissionRequested)
-            CameraPermissionGranted -> {
-                barcodeStart()
+        viewModel.navigation.observe(this, Observer { event ->
+            event.getContent()?.let {
+                startActivity<ProductDetailActivity> {
+                    putExtra(ProductDetailActivity.INTENT_PRODUCT, it)
+                }
             }
-            CameraPermissionDenied -> finish()
-        }
+        })
     }
 
     private fun barcodeStart() {
@@ -66,7 +55,6 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
             it.adapter =
                 ProductListAdapter { product ->
                     viewModel.onProductClicked(product)
-
                 }.apply {
                     adapter = this
                 }
@@ -74,9 +62,12 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
         }
     }
 
-    private fun updateUi(viewState: BarcodeReaderViewState?) {
+    private fun updateUi(viewState: UiModel?) {
         when (viewState) {
-            is Content -> setProductList(viewState.productList)
+            UiModel.RequestCameraPermission -> cameraPermissionRequester.request(viewModel::onCameraPermissionRequested)
+            is UiModel.Content -> setProductList(viewState.productList)
+            UiModel.StartCamera -> barcodeStart()
+            UiModel.StopCamera -> finish()
         }
     }
 
@@ -87,7 +78,7 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
 
     override fun onResume() {
         super.onResume()
-        viewModel.checkPermissions()
+        viewModel.refresh()
     }
 
     override fun onPause() {

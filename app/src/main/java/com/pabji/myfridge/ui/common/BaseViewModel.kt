@@ -1,8 +1,10 @@
 package com.pabji.myfridge.ui.common
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 
-open class BaseViewModel : ViewModel(), Scope by Scope.Impl() {
+open class BaseViewModel(uiDispatcher: CoroutineDispatcher) : ViewModel(),
+    Scope by Scope.Impl(uiDispatcher) {
 
     init {
         this.initScope()

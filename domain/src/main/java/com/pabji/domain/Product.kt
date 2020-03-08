@@ -7,13 +7,13 @@ data class Product(
     val previewUrl: String = "",
     val imageUrl: String = "",
     val quantity: String = "",
-    val stores: List<String> = emptyList(),
+    val stores: String = "",
     val countries: List<String> = emptyList(),
     val imageNutritionUrl: String = "",
     val brands: List<String> = emptyList(),
     val genericName: String = "",
     val ingredientsText: String = "",
     val imageIngredientsUrl: String = "",
-    val categories: List<String> = emptyList(),
+    val categories: String = "",
     val existInFridge: Boolean = false
 )

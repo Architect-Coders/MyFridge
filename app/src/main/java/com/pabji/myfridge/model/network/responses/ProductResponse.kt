@@ -28,12 +28,12 @@ internal fun ProductResponse.toProduct() =
         previewUrl = previewUrl ?: "",
         imageUrl = imageUrl ?: "",
         quantity = quantity ?: "",
-        stores = stores?.getListByDelimit(",") ?: emptyList(),
+        stores = stores ?: "",
         countries = countries?.getListByDelimit(",") ?: emptyList(),
         imageNutritionUrl = imageNutritionUrl ?: "",
         brands = brands?.getListByDelimit(",") ?: emptyList(),
         genericName = genericName ?: "",
         ingredientsText = ingredientsText ?: "",
         imageIngredientsUrl = ingredientsUrl ?: "",
-        categories = categories?.getListByDelimit(",") ?: emptyList()
+        categories = categories ?: ""
     )

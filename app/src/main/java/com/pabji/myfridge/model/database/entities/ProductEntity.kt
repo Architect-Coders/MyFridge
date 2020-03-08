@@ -31,14 +31,14 @@ internal fun ProductEntity.toProduct() =
         previewUrl,
         imageUrl,
         quantity,
-        stores.getListByDelimit(","),
+        stores,
         countries.getListByDelimit(","),
         imageNutritionUrl,
         brands.getListByDelimit(","),
         genericName,
         ingredientsText,
         imageIngredientsUrl,
-        categories.getListByDelimit(","),
+        categories,
         existInFridge = true
     )
 
@@ -49,12 +49,12 @@ internal fun Product.toProductEntity() = ProductEntity(
     previewUrl,
     imageUrl,
     quantity,
-    stores.joinToString(),
+    stores,
     countries.joinToString(),
     imageNutritionUrl,
     brands.joinToString(),
     genericName,
     ingredientsText,
     imageIngredientsUrl,
-    categories.joinToString()
+    categories
 )

@@ -6,33 +6,42 @@ import com.pabji.domain.Either
 import com.pabji.domain.Product
 import com.pabji.myfridge.model.database.entities.toProduct
 import com.pabji.myfridge.model.database.entities.toProductEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RoomDataSource(database: RoomDatabase) : LocalDatasource {
 
     private val productDao = database.productDao()
 
-    override suspend fun getProductListByBarcodeList(barcodeList: List<String>) =
-        Either.Right(productDao.getProductsByBarcode(barcodeList).map { it.toProduct() })
-
     override suspend fun getProductByBarcode(barcode: String?) =
-        productDao.getProductByBarcode(barcode ?: "")?.run {
-            Either.Right(toProduct())
-        } ?: Either.Left(DetailError)
+        withContext(Dispatchers.IO) {
+            productDao.getProductByBarcode(barcode ?: "")?.run {
+                Either.Right(toProduct())
+            } ?: Either.Left(DetailError)
+        }
 
     override suspend fun getProductById(productId: Long) =
-        productDao.getProductById(productId)?.run {
-            Either.Right(toProduct())
-        } ?: Either.Left(DetailError)
+        withContext(Dispatchers.IO) {
+            productDao.getProductById(productId)?.run {
+                Either.Right(toProduct())
+            } ?: Either.Left(DetailError)
+        }
 
-    override suspend fun getProductList() = productDao.getAll().map { it.toProduct() }
+    override suspend fun getProductList() =
+        withContext(Dispatchers.IO) { productDao.getAll().map { it.toProduct() } }
 
     override suspend fun saveProduct(product: Product) =
-        productDao.insert(product.toProductEntity())
+        withContext(Dispatchers.IO) {
+            productDao.insert(product.toProductEntity())
+        }
 
     override suspend fun removeProduct(product: Product) =
-        productDao.remove(product.toProductEntity())
+        withContext(Dispatchers.IO) {
+            productDao.remove(product.toProductEntity())
+        }
 
     override suspend fun getProductsByTerm(searchTerm: String) =
-        productDao.getProductsByTerm(searchTerm).map { it.toProduct() }
-
+        withContext(Dispatchers.IO) {
+            productDao.getProductsByTerm(searchTerm).map { it.toProduct() }
+        }
 }
