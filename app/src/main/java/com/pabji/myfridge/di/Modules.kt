@@ -68,8 +68,17 @@ val scopesModule = module {
     }
 
     scope(named<ProductDetailActivity>()) {
-        viewModel { (product: ItemProduct) -> ProductDetailViewModel(product, get(), get(), get()) }
+        viewModel { (product: ItemProduct) ->
+            ProductDetailViewModel(
+                product,
+                get(),
+                get(),
+                get(),
+                get()
+            )
+        }
         scoped { GetProductDetail(get()) }
+        scoped { RemoveProduct(get()) }
         scoped { SaveProduct(get()) }
     }
 

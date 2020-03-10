@@ -3,14 +3,13 @@ package com.pabji.myfridge.ui.productDetail
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import coil.api.load
 import coil.size.Scale
 import com.pabji.domain.Product
 import com.pabji.myfridge.R
 import com.pabji.myfridge.model.ItemProduct
-import com.pabji.myfridge.ui.common.extensions.gone
-import com.pabji.myfridge.ui.common.extensions.setVisible
 import com.pabji.myfridge.ui.common.extensions.visible
 import com.pabji.myfridge.ui.productDetail.ProductDetailViewModel.UiModel
 import kotlinx.android.synthetic.main.activity_product_detail.*
@@ -39,19 +38,30 @@ class ProductDetailActivity : AppCompatActivity() {
             }
             is UiModel.Content -> showProduct(viewState.product)
             is UiModel.ProductSaved -> showSaved(viewState.product)
+            is UiModel.ProductRemoved -> showRemoved(viewState.product)
             UiModel.Error -> showError()
         }
+    }
+
+    private fun showRemoved(product: Product) {
+        Toast.makeText(
+                this,
+                "${product.name} has been removed from your fridge",
+                Toast.LENGTH_SHORT
+            )
+            .show()
+        setButton(false)
     }
 
     private fun showSaved(product: Product) {
         Toast.makeText(this, "${product.name} has been saved in your fridge", Toast.LENGTH_SHORT)
             .show()
-        btn_add.gone()
+        setButton(true)
     }
 
     private fun showProduct(product: Product) {
         product.run {
-            btn_add.setVisible(!existInFridge)
+            setButton(existInFridge)
             setProductImage(imageUrl)
             setProductName(name)
             setGenericName(genericName)
@@ -59,6 +69,17 @@ class ProductDetailActivity : AppCompatActivity() {
             setCategories(categories)
             setStores(stores)
         }
+    }
+
+    private fun setButton(existInFridge: Boolean) {
+        if (existInFridge) {
+            btn_add.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+            btn_add.text = getString(R.string.remove_from_fridge)
+        } else {
+            btn_add.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            btn_add.text = getString(R.string.add_to_the_fridge)
+        }
+        btn_add.visible()
     }
 
     private fun setStores(stores: String) {

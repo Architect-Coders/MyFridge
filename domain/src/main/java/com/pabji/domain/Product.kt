@@ -15,5 +15,5 @@ data class Product(
     val ingredientsText: String = "",
     val imageIngredientsUrl: String = "",
     val categories: String = "",
-    val existInFridge: Boolean = false
+    var existInFridge: Boolean = false
 )
