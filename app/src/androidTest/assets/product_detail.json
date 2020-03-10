@@ -1,0 +1,20 @@
+{
+  "status_verbose": "product found",
+  "product": {
+    "product_name": "Coca Cola",
+    "image_small_url": "https://static.openfoodfacts.org/images/products/544/900/000/0996/front_es.446.200.jpg",
+    "stores": "Tesco,Auchan,Carrefour",
+    "quantity": "330 ml",
+    "categories": "Beverages, Carbonated drinks, Sodas, Non-Alcoholic beverages, Colas, Sweetened beverages, pl:zawiera-kofeinę",
+    "image_front_url": "https://static.openfoodfacts.org/images/products/544/900/000/0996/front_es.446.400.jpg",
+    "brands": "Coca-Cola",
+    "image_nutrition_url": "https://static.openfoodfacts.org/images/products/544/900/000/0996/nutrition_es.218.400.jpg",
+    "image_ingredients_url": "https://static.openfoodfacts.org/images/products/544/900/000/0996/ingredients_es.215.400.jpg",
+    "ingredients_text": "water, sugar, carbon dioxide, dye e150d, acidifier e338, natural flavors including caffeine,",
+    "countries": "Algérie,Autriche,Belgique,Brésil,Cameroun,Canada,France,Géorgie,Allemagne,Inde,Italie,Luxembourg,Mali,Martinique,Mexique,Maroc,Pays-Bas,Nouvelle-Calédonie,Pologne,Portugal,La Réunion,Arabie saoudite,Sénégal,Espagne,Suisse,Tunisie,Royaume-Uni,États-Unis, en:romania, en:ireland, en:andorra",
+    "code": "5449000000996",
+    "generic_name": "Sparkling Soft Drink with Vegetable Extracts"
+  },
+  "code": "5449000000996",
+  "status": 1
+}
