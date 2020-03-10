@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.pabji.myfridge.R
 import com.pabji.myfridge.ui.barcode.BarcodeReaderActivity
+import com.pabji.myfridge.ui.common.extensions.gone
 import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.productList.ProductListFragment
 import com.pabji.myfridge.ui.searchProducts.SearchProductsFragment
@@ -25,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     private fun setViewPager() {
         vp_container.run {
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            offscreenPageLimit = 2
             adapter = MainViewPagerAdapter(
                 supportFragmentManager,
                 lifecycle
@@ -54,6 +54,10 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+
+    private fun hideBottomNavigation() {
+        bottom_navigation.gone()
     }
 
     private fun setFab() {

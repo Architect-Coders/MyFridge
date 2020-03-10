@@ -37,15 +37,18 @@ fun Application.initDI() {
     }
 }
 
+val BASE_URL = named("baseUrl")
+
 val appModule = module {
     single {
-        Room.databaseBuilder(get(), RoomDatabase::class.java, "products.db")
+        Room.databaseBuilder(get(), RoomDatabase::class.java, "products1.db")
             .fallbackToDestructiveMigration().build()
     }
-    single { RetrofitApiClient.createService() }
     factory<LocalDatasource> { RoomDataSource(get()) }
     factory<RemoteDatasource> { RetrofitDataSource(get()) }
     single<CoroutineDispatcher> { Dispatchers.Main }
+    single(BASE_URL) { "https://es.openfoodfacts.org" }
+    single { RetrofitApiClient(get(BASE_URL)) }
 }
 
 val dataModule = module {

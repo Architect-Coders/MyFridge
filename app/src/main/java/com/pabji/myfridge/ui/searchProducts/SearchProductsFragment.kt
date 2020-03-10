@@ -64,7 +64,7 @@ class SearchProductsFragment : BaseFragment() {
         inflater.inflate(R.menu.main_toolbar_menu, menu)
 
         val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE) as? SearchManager
-        val searchMenuItem = menu.findItem(R.id.action_search) as SupportMenuItem
+        val searchMenuItem = menu.findItem(R.id.action_toolbar_search) as SupportMenuItem
         searchView = (searchMenuItem.actionView as SearchView).apply {
             setSearchableInfo(searchManager?.getSearchableInfo(activity?.componentName))
             setOnQueryTextFocusChangeListener { _, isVisible ->
