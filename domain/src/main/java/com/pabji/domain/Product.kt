@@ -1,7 +1,6 @@
 package com.pabji.domain
 
 data class Product(
-    val id: Long? = null,
     val barcode: String = "",
     val name: String,
     val previewUrl: String = "",

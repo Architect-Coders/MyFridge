@@ -20,13 +20,6 @@ class RoomDataSource(database: RoomDatabase) : LocalDatasource {
             } ?: Either.Left(DetailError)
         }
 
-    override suspend fun getProductById(productId: Long) =
-        withContext(Dispatchers.IO) {
-            productDao.getProductById(productId)?.run {
-                Either.Right(toProduct())
-            } ?: Either.Left(DetailError)
-        }
-
     override suspend fun getProductList() =
         withContext(Dispatchers.IO) { productDao.getAll().map { it.toProduct() } }
 
