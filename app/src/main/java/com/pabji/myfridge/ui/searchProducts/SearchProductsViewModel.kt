@@ -16,11 +16,7 @@ class SearchProductsViewModel(
 ) : BaseViewModel(uiDispatcher) {
 
     private val _model = MutableLiveData<UiModel>()
-    val model: LiveData<UiModel>
-        get() {
-            if (_model.value == null) onSearch()
-            return _model
-        }
+    val model: LiveData<UiModel> = _model
 
     private val _navigation = MutableLiveData<Event<ItemProduct>>()
     val navigation: LiveData<Event<ItemProduct>> = _navigation

@@ -57,14 +57,18 @@ class ProductDetailIntegrationTest : AutoCloseKoinTest() {
     @Test
     fun `when local product exist, product is shown`() {
         vm.model.observeForever(uiModelObserver)
-        verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.Content(mockedLocalProduct))
+        verify(uiModelObserver).onChanged(
+            ProductDetailViewModel.UiModel.FullContent(
+                mockedLocalProduct
+            )
+        )
     }
 
     @Test
     fun `when local product doesnt exist, remote product is shown`() {
         localDataSource.reset()
         vm.model.observeForever(uiModelObserver)
-        verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.Content(mockedProduct))
+        verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.FullContent(mockedProduct))
     }
 
     @Test

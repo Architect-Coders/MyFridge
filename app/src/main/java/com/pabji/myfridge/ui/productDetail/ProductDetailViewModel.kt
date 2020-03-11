@@ -30,8 +30,8 @@ class ProductDetailViewModel(
         }
 
     sealed class UiModel {
-        object Loading : UiModel()
-        data class Content(val product: Product) : UiModel()
+        data class BasicContent(val product: ItemProduct?) : UiModel()
+        data class FullContent(val product: Product) : UiModel()
         data class ProductSaved(val product: Product) : UiModel()
         data class ProductRemoved(val product: Product) : UiModel()
         object Error : UiModel()
@@ -39,13 +39,13 @@ class ProductDetailViewModel(
 
     private fun loadProduct(itemProduct: ItemProduct?) {
         launch {
-            _model.value = UiModel.Loading
+            _model.value = UiModel.BasicContent(itemProduct)
             _model.value = itemProduct?.run {
                 getProductDetail(toProduct()).fold({
                     UiModel.Error
                 }, {
                     product = it
-                    UiModel.Content(it)
+                    UiModel.FullContent(it)
                 })
             } ?: UiModel.Error
         }

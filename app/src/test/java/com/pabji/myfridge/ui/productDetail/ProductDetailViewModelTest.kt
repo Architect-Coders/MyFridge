@@ -54,7 +54,11 @@ class ProductDetailViewModelTest {
         runBlocking {
             whenever(getProductDetail(any())).thenReturn(Either.Right(mockedProduct))
             vm.model.observeForever(uiModelObserver)
-            verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.Content(mockedProduct))
+            verify(uiModelObserver).onChanged(
+                ProductDetailViewModel.UiModel.FullContent(
+                    mockedProduct
+                )
+            )
         }
     }
 

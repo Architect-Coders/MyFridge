@@ -16,8 +16,12 @@ class ProductRepositoryImpl(
     override suspend fun removeProduct(product: Product) = localDataSource.removeProduct(product)
 
     override suspend fun searchProducts(searchTerm: String?): List<Product> {
-
-        val localProducts = localDataSource.getProductsByTerm(searchTerm ?: "")
+        val localProducts =
+            if (searchTerm.isNullOrEmpty()) {
+                localDataSource.getProductList()
+            } else {
+                localDataSource.getProductsByTerm(searchTerm)
+            }
 
         val remoteProducts = remoteDataSource.searchProducts(searchTerm)
             .map { it.getFilteredProductsByProducts(localProducts) }
