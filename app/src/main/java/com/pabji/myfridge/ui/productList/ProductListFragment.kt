@@ -15,12 +15,12 @@ import com.pabji.myfridge.ui.common.extensions.visible
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import com.pabji.myfridge.ui.productList.ProductListViewModel.UiModel
 import kotlinx.android.synthetic.main.fragment_product_list.*
-import org.koin.android.scope.currentScope
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.lifecycleScope
+import org.koin.android.viewmodel.scope.viewModel
 
 class ProductListFragment : BaseFragment() {
 
-    private val viewModel: ProductListViewModel by currentScope.viewModel(this)
+    private val viewModel: ProductListViewModel by lifecycleScope.viewModel(this)
 
     private lateinit var adapter: ProductListAdapter
 

@@ -14,13 +14,13 @@ import com.pabji.myfridge.ui.common.extensions.gone
 import com.pabji.myfridge.ui.common.extensions.visible
 import com.pabji.myfridge.ui.productDetail.ProductDetailViewModel.UiModel
 import kotlinx.android.synthetic.main.activity_product_detail.*
-import org.koin.android.scope.currentScope
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.lifecycleScope
+import org.koin.android.viewmodel.scope.viewModel
 import org.koin.core.parameter.parametersOf
 
 class ProductDetailActivity : AppCompatActivity() {
 
-    private val viewModel: ProductDetailViewModel by currentScope.viewModel(this) {
+    private val viewModel: ProductDetailViewModel by lifecycleScope.viewModel(this) {
         parametersOf(intent.getSerializableExtra(INTENT_PRODUCT) as? ItemProduct)
     }
 

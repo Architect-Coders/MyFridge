@@ -41,8 +41,10 @@ class ProductRepositoryImpl(
 
     override suspend fun searchProductsByBarcode(barcodeList: List<String>): List<Product> =
         barcodeList
-            .mapNotNull {
-                remoteDataSource.getProductByBarcode(it).fold({ null }) { product -> product }
+            .mapNotNull { barcode ->
+                localDataSource.getProductByBarcode(barcode).fold({ null }) { product -> product }
+                    ?: remoteDataSource.getProductByBarcode(barcode)
+                        .fold({ null }) { product -> product }
             }
 }
 

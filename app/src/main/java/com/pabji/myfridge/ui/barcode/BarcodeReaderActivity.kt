@@ -16,15 +16,15 @@ import com.pabji.myfridge.ui.common.extensions.startActivity
 import com.pabji.myfridge.ui.common.extensions.visible
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import kotlinx.android.synthetic.main.activity_live_preview.*
-import org.koin.android.scope.currentScope
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.lifecycleScope
+import org.koin.android.viewmodel.scope.viewModel
 
 class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCallback {
 
     private val cameraPermissionRequester = PermissionRequester(this, Manifest.permission.CAMERA)
     private lateinit var adapter: ProductListAdapter
 
-    private val viewModel: BarcodeReaderViewModel by currentScope.viewModel(this)
+    private val viewModel: BarcodeReaderViewModel by lifecycleScope.viewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
