@@ -23,13 +23,18 @@ class SearchProductsFragment : BaseFragment() {
 
     private var instanceState: Bundle? = null
     private lateinit var searchView: SearchView
-    private lateinit var adapter: ProductListAdapter
+    private lateinit var listAdapter: ProductListAdapter
 
     private val viewModel: SearchProductsViewModel by currentScope.viewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onSearch()
     }
 
     override fun onCreateView(
@@ -93,7 +98,7 @@ class SearchProductsFragment : BaseFragment() {
                 ProductListAdapter { product ->
                     viewModel.onProductClicked(product)
                 }.apply {
-                    adapter = this
+                    listAdapter = this
                 }
             it.layoutManager = LinearLayoutManager(context)
         }
@@ -107,7 +112,7 @@ class SearchProductsFragment : BaseFragment() {
             UiModel.Loading -> progress_bar.show()
             is UiModel.Content -> {
                 rv_product_list.visible()
-                adapter.productList = viewState.list
+                listAdapter.productList = viewState.list
             }
             UiModel.EmptyList -> {
                 tv_emptyList.visible()

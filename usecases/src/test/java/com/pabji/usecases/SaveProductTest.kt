@@ -26,7 +26,7 @@ class SaveProductTest {
     @Test
     fun `when invoke should call saveProduct from repository`() {
         runBlocking {
-            val product = mockedProduct.copy(id = 1)
+            val product = mockedProduct.copy()
             saveProduct(product)
             verify(productRepository).saveProduct(product)
         }

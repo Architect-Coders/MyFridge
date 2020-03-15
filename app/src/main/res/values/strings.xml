@@ -18,4 +18,5 @@
     <string name="product_detail_title">Detalle</string>
     <string name="empty_fridge">Tu nevera está vacía</string>
     <string name="search_failed">Búsqueda no encontrada</string>
+    <string name="remove_from_fridge">Remove from fridge</string>
 </resources>

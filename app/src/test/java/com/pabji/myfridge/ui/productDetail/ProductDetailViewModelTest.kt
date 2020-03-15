@@ -10,6 +10,7 @@ import com.pabji.domain.Either
 import com.pabji.myfridge.model.toItemProduct
 import com.pabji.testshared.mockedProduct
 import com.pabji.usecases.GetProductDetail
+import com.pabji.usecases.RemoveProduct
 import com.pabji.usecases.SaveProduct
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -33,6 +34,9 @@ class ProductDetailViewModelTest {
     lateinit var saveProduct: SaveProduct
 
     @Mock
+    lateinit var removeProduct: RemoveProduct
+
+    @Mock
     lateinit var uiModelObserver: Observer<ProductDetailViewModel.UiModel>
 
     private lateinit var vm: ProductDetailViewModel
@@ -45,6 +49,7 @@ class ProductDetailViewModelTest {
             mockedItemProduct,
             getProductDetail,
             saveProduct,
+            removeProduct,
             Dispatchers.Unconfined
         )
     }
@@ -54,7 +59,11 @@ class ProductDetailViewModelTest {
         runBlocking {
             whenever(getProductDetail(any())).thenReturn(Either.Right(mockedProduct))
             vm.model.observeForever(uiModelObserver)
-            verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.Content(mockedProduct))
+            verify(uiModelObserver).onChanged(
+                ProductDetailViewModel.UiModel.FullContent(
+                    mockedProduct
+                )
+            )
         }
     }
 
@@ -72,7 +81,7 @@ class ProductDetailViewModelTest {
         runBlocking {
             whenever(getProductDetail(any())).thenReturn(Either.Right(mockedProduct))
             vm.model.observeForever(uiModelObserver)
-            vm.onClickButtonAdd()
+            vm.onClickButton()
             verify(uiModelObserver).onChanged(
                 ProductDetailViewModel.UiModel.ProductSaved(
                     mockedProduct
@@ -83,7 +92,13 @@ class ProductDetailViewModelTest {
 
     @Test
     fun `while observing Model LiveData snf Itemproduct is null, error is shown`() {
-        val vm = ProductDetailViewModel(null, getProductDetail, saveProduct, Dispatchers.Unconfined)
+        val vm = ProductDetailViewModel(
+            null,
+            getProductDetail,
+            saveProduct,
+            removeProduct,
+            Dispatchers.Unconfined
+        )
         runBlocking {
             vm.model.observeForever(uiModelObserver)
             verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.Error)

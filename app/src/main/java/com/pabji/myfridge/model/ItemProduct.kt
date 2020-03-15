@@ -4,7 +4,6 @@ import com.pabji.domain.Product
 import java.io.Serializable
 
 data class ItemProduct(
-    val id: Long? = null,
     val name: String = "",
     val previewUrl: String = "",
     val existInFridge: Boolean = false,
@@ -13,7 +12,6 @@ data class ItemProduct(
 
 fun Product.toItemProduct(): ItemProduct =
     ItemProduct(
-        id,
         name,
         previewUrl,
         existInFridge,
@@ -21,4 +19,4 @@ fun Product.toItemProduct(): ItemProduct =
     )
 
 fun ItemProduct.toProduct(): Product =
-    Product(id = id, name = name, barcode = barcode)
+    Product(name = name, barcode = barcode)

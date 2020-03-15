@@ -22,7 +22,7 @@ class ProductListFragment : BaseFragment() {
 
     private val viewModel: ProductListViewModel by currentScope.viewModel(this)
 
-    private lateinit var adapter: ProductListAdapter
+    private lateinit var listAdapter: ProductListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,12 +54,12 @@ class ProductListFragment : BaseFragment() {
 
     private fun setProductListView() {
         rv_product_list.let {
-            adapter = ProductListAdapter(
+            listAdapter = ProductListAdapter(
                 ProductListAdapter.RecyclerType.GRID
             ) { product ->
                 viewModel.onProductClicked(product)
             }
-            it.adapter = adapter
+            it.adapter = listAdapter
             it.layoutManager = GridLayoutManager(context, GRID_SPAN_COUNT)
         }
     }
@@ -67,7 +67,7 @@ class ProductListFragment : BaseFragment() {
     private fun updateProductList(viewState: UiModel) {
         tv_emptyList.gone()
         when (viewState) {
-            is UiModel.Content -> adapter.productList = viewState.list
+            is UiModel.Content -> listAdapter.productList = viewState.list
             UiModel.EmptyList -> tv_emptyList.visible()
         }
     }

@@ -26,7 +26,7 @@ class RemoveProductTest {
     @Test
     fun `when invoke should call removeProduct from repository`() {
         runBlocking {
-            val product = mockedProduct.copy(id = 1)
+            val product = mockedProduct.copy()
             removeProduct(product)
             verify(productRepository).removeProduct(product)
         }

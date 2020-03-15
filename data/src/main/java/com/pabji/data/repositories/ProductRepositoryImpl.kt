@@ -16,8 +16,12 @@ class ProductRepositoryImpl(
     override suspend fun removeProduct(product: Product) = localDataSource.removeProduct(product)
 
     override suspend fun searchProducts(searchTerm: String?): List<Product> {
-
-        val localProducts = localDataSource.getProductsByTerm(searchTerm ?: "")
+        val localProducts =
+            if (searchTerm.isNullOrEmpty()) {
+                localDataSource.getProductList()
+            } else {
+                localDataSource.getProductsByTerm(searchTerm)
+            }
 
         val remoteProducts = remoteDataSource.searchProducts(searchTerm)
             .map { it.getFilteredProductsByProducts(localProducts) }
@@ -27,16 +31,9 @@ class ProductRepositoryImpl(
     }
 
     override suspend fun getProductDetail(product: Product): Either<DomainError, Product> =
-        with(localDataSource.getProductById(product.id ?: 0)) {
+        with(localDataSource.getProductByBarcode(product.barcode)) {
             if (isLeft) {
-                val barcode = product.barcode
-                with(localDataSource.getProductByBarcode(barcode)) {
-                    if (isLeft) {
-                        remoteDataSource.getProductByBarcode(barcode)
-                    } else {
-                        this
-                    }
-                }
+                remoteDataSource.getProductByBarcode(product.barcode)
             } else {
                 this
             }
@@ -44,8 +41,10 @@ class ProductRepositoryImpl(
 
     override suspend fun searchProductsByBarcode(barcodeList: List<String>): List<Product> =
         barcodeList
-            .mapNotNull {
-                remoteDataSource.getProductByBarcode(it).fold({ null }) { product -> product }
+            .mapNotNull { barcode ->
+                localDataSource.getProductByBarcode(barcode).fold({ null }) { product -> product }
+                    ?: remoteDataSource.getProductByBarcode(barcode)
+                        .fold({ null }) { product -> product }
             }
 }
 
