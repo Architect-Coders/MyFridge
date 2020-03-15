@@ -93,11 +93,11 @@ class ProductRepositoryTest {
     }
 
     @Test
-    fun `when searchProduct without should return productList`() {
+    fun `when searchProduct without term should return productList`() {
         runBlocking {
             val remoteProductList = mockedRemoteProductList
 
-            whenever(localDataSource.getProductsByTerm("")).thenReturn(emptyList())
+            whenever(localDataSource.getProductList()).thenReturn(emptyList())
             whenever(remoteDatasource.searchProducts(null)).thenReturn(
                 Either.Right(
                     remoteProductList
@@ -106,25 +106,10 @@ class ProductRepositoryTest {
 
             val result = productRepository.searchProducts()
 
-            verify(localDataSource).getProductsByTerm("")
+            verify(localDataSource).getProductList()
             verify(remoteDatasource).searchProducts(null)
 
             assertEquals(remoteProductList, result)
-        }
-    }
-
-    @Test
-    fun `when getProductDetail with id should return product from localDatasource`() {
-        runBlocking {
-            val product = mockedProduct.copy(id = 1)
-
-            whenever(localDataSource.getProductById(1)).thenReturn(Either.Right(product))
-
-            val result = productRepository.getProductDetail(product)
-
-            verify(localDataSource).getProductById(1)
-            assertTrue(result.isRight)
-            assertEquals(Either.Right(product), result)
         }
     }
 
@@ -133,7 +118,6 @@ class ProductRepositoryTest {
         runBlocking {
             val mockedBarcode = "123456"
             val product = mockedLocalProduct.copy(barcode = mockedBarcode)
-            whenever(localDataSource.getProductById(any())).thenReturn(Either.Left(DetailError))
             whenever(localDataSource.getProductByBarcode(mockedBarcode)).thenReturn(
                 Either.Right(product)
             )
@@ -151,7 +135,6 @@ class ProductRepositoryTest {
         runBlocking {
             val mockedBarcode = "123456"
             val product = mockedLocalProduct.copy(barcode = mockedBarcode)
-            whenever(localDataSource.getProductById(any())).thenReturn(Either.Left(DetailError))
             whenever(localDataSource.getProductByBarcode(any())).thenReturn(Either.Left(DetailError))
             whenever(remoteDatasource.getProductByBarcode(mockedBarcode)).thenReturn(
                 Either.Right(product)
@@ -173,7 +156,6 @@ class ProductRepositoryTest {
 
             val product = mockedLocalProduct.copy()
 
-            whenever(localDataSource.getProductById(any())).thenReturn(Either.Left(DetailError))
             whenever(localDataSource.getProductByBarcode(any())).thenReturn(Either.Left(DetailError))
             whenever(remoteDatasource.getProductByBarcode(any())).thenReturn(Either.Left(DetailError))
 
@@ -187,13 +169,31 @@ class ProductRepositoryTest {
     }
 
     @Test
-    fun `when searchProductsByBarcode with barcodeList should return product list`() {
+    fun `when searchProductsByBarcode with barcodeList should return product list from localDatasource`() {
         runBlocking {
 
+            whenever(localDataSource.getProductByBarcode(any())).thenReturn(
+                Either.Right(mockedProduct)
+            )
+
+            val result = productRepository.searchProductsByBarcode(mockedBarcodeList)
+
+            verify(localDataSource, times(mockedBarcodeList.size)).getProductByBarcode(any())
+
+            assertTrue(result.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun `when searchProductsByBarcode with barcodeList should return product list from remoteDatasource`() {
+        runBlocking {
+
+            whenever(localDataSource.getProductByBarcode(any())).thenReturn(
+                Either.Left(SearchError)
+            )
+
             whenever(remoteDatasource.getProductByBarcode(any())).thenReturn(
-                Either.Right(
-                    mockedProduct
-                )
+                Either.Right(mockedProduct)
             )
 
             val result = productRepository.searchProductsByBarcode(mockedBarcodeList)
@@ -208,6 +208,7 @@ class ProductRepositoryTest {
     fun `when searchProductsByBarcode with barcodeList should return empty list`() {
         runBlocking {
 
+            whenever(localDataSource.getProductByBarcode(any())).thenReturn(Either.Left(SearchError))
             whenever(remoteDatasource.getProductByBarcode(any())).thenReturn(Either.Left(SearchError))
 
             val result = productRepository.searchProductsByBarcode(mockedBarcodeList)

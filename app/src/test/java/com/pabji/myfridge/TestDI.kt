@@ -4,7 +4,9 @@ import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
 import com.pabji.domain.*
 import com.pabji.myfridge.di.dataModule
+import com.pabji.testshared.mockedLocalProduct
 import com.pabji.testshared.mockedLocalProductList
+import com.pabji.testshared.mockedProduct
 import com.pabji.testshared.mockedRemoteProductList
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.context.startKoin
@@ -25,67 +27,47 @@ private val mockedAppModule = module {
 
 class FakeLocalDataSource : LocalDatasource {
 
-    private var productList: MutableList<Product> = mockedLocalProductList.toMutableList()
     var isError: Boolean = false
-
-    fun reset() {
-        productList.clear()
-    }
 
     override suspend fun getProductByBarcode(barcode: String?): Either<DomainError, Product> =
         if (isError) {
             Either.Left(DetailError)
         } else {
-            productList.find { it.barcode == barcode }?.run {
-                Either.Right(this)
-            } ?: Either.Left(DetailError)
+            Either.Right(mockedLocalProduct)
         }
 
-    override suspend fun getProductById(productId: Long): Either<DomainError, Product> =
-        if (isError) {
-            Either.Left(DetailError)
-        } else {
-            productList.find { it.id == productId }?.run {
-                Either.Right(this)
-            } ?: Either.Left(DetailError)
-        }
-
-    override suspend fun getProductList(): List<Product> = productList
-
-    override suspend fun saveProduct(product: Product) {
-        productList.add(product)
+    override suspend fun getProductList(): List<Product> = if (isError) {
+        emptyList()
+    } else {
+        mockedLocalProductList
     }
 
-    override suspend fun removeProduct(product: Product) {
-        productList.remove(product)
-    }
+    override suspend fun saveProduct(product: Product) {}
 
-    override suspend fun getProductsByTerm(searchTerm: String): List<Product> =
-        productList.filterIndexed { _, product ->
-            product.name.startsWith(searchTerm)
-        }
+    override suspend fun removeProduct(product: Product) {}
+
+    override suspend fun getProductsByTerm(searchTerm: String): List<Product> = if (isError) {
+        emptyList()
+    } else {
+        mockedLocalProductList
+    }
 }
 
 class FakeRemoteDataSource : RemoteDatasource {
 
-    private var productList: MutableList<Product> = mockedRemoteProductList.toMutableList()
     var isError: Boolean = false
 
     override suspend fun searchProducts(searchTerm: String?): Either<DomainError, List<Product>> =
         if (isError) {
             Either.Left(SearchError)
         } else {
-            Either.Right(productList.filterIndexed { _, product ->
-                product.name.startsWith(searchTerm ?: "")
-            })
+            Either.Right(mockedRemoteProductList)
         }
 
     override suspend fun getProductByBarcode(barcode: String): Either<DomainError, Product> =
         if (isError) {
             Either.Left(DetailError)
         } else {
-            productList.find { it.barcode == barcode }?.run {
-                Either.Right(this)
-            } ?: Either.Left(DetailError)
+            Either.Right(mockedProduct)
         }
 }

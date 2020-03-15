@@ -34,11 +34,10 @@
         </activity>
         <activity
                 android:name="com.pabji.myfridge.ui.productDetail.ProductDetailActivity"
-                android:parentActivityName="com.pabji.myfridge.ui.main.MainActivity" />
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity
-                android:name="com.pabji.myfridge.ui.newProduct.NewProductActivity"
-                android:parentActivityName="com.pabji.myfridge.ui.main.MainActivity" />
-        <activity android:name=".ui.barcode.BarcodeReaderActivity" />
+                android:name=".ui.barcode.BarcodeReaderActivity"
+                android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

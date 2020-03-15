@@ -46,7 +46,7 @@ class ProductListIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `when local is empty, should show empty product list state`() {
-        localDataSource.reset()
+        localDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         vm.updateData()
         verify(uiModelObserver).onChanged(ProductListViewModel.UiModel.EmptyList)

@@ -32,7 +32,7 @@ class GetProductDetailTest {
     @Test
     fun `when invoke should return product`() {
         runBlocking {
-            val product = mockedProduct.copy(id = 1)
+            val product = mockedProduct.copy()
             whenever(productRepository.getProductDetail(product)).thenReturn(Either.Right(product))
 
             val result = getProductDetail(product)

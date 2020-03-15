@@ -32,6 +32,11 @@ class SearchProductsFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onSearch()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
