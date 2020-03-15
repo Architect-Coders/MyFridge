@@ -8,6 +8,7 @@ import com.pabji.myfridge.model.ItemProduct
 import com.pabji.myfridge.model.toProduct
 import com.pabji.myfridge.ui.common.BaseViewModel
 import com.pabji.usecases.GetProductDetail
+import com.pabji.usecases.RemoveProduct
 import com.pabji.usecases.SaveProduct
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -16,9 +17,11 @@ class ProductDetailViewModel(
     private var itemProduct: ItemProduct?,
     private val getProductDetail: GetProductDetail,
     private val saveProduct: SaveProduct,
+    private val removeProduct: RemoveProduct,
     uiDispatcher: CoroutineDispatcher
 ) : BaseViewModel(uiDispatcher) {
 
+    private var product: Product? = null
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
         get() {
@@ -27,31 +30,41 @@ class ProductDetailViewModel(
         }
 
     sealed class UiModel {
-        object Loading : UiModel()
-        data class Content(val product: Product) : UiModel()
+        data class BasicContent(val product: ItemProduct?) : UiModel()
+        data class FullContent(val product: Product) : UiModel()
         data class ProductSaved(val product: Product) : UiModel()
+        data class ProductRemoved(val product: Product) : UiModel()
         object Error : UiModel()
     }
 
-    private fun loadProduct(product: ItemProduct?) {
+    private fun loadProduct(itemProduct: ItemProduct?) {
         launch {
-            _model.value = UiModel.Loading
-            _model.value = product?.run {
+            _model.value = UiModel.BasicContent(itemProduct)
+            _model.value = itemProduct?.run {
                 getProductDetail(toProduct()).fold({
                     UiModel.Error
                 }, {
-                    UiModel.Content(it)
+                    product = it
+                    UiModel.FullContent(it)
                 })
             } ?: UiModel.Error
         }
     }
 
-    fun onClickButtonAdd() {
+    fun onClickButton() {
         launch {
-            when (val value = _model.value) {
-                is UiModel.Content -> {
-                    saveProduct(value.product)
-                    _model.value = UiModel.ProductSaved(value.product)
+            product?.run {
+                _model.value = when {
+                    existInFridge -> {
+                        removeProduct(this)
+                        existInFridge = false
+                        UiModel.ProductRemoved(this)
+                    }
+                    else -> {
+                        saveProduct(this)
+                        existInFridge = true
+                        UiModel.ProductSaved(this)
+                    }
                 }
             }
         }

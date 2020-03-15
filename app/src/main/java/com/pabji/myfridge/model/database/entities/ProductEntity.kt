@@ -7,8 +7,7 @@ import com.pabji.myfridge.model.common.extensions.getListByDelimit
 
 @Entity(tableName = "products")
 data class ProductEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long?,
-    val barcode: String,
+    @PrimaryKey val barcode: String,
     val name: String,
     val previewUrl: String,
     val imageUrl: String,
@@ -25,7 +24,6 @@ data class ProductEntity(
 
 internal fun ProductEntity.toProduct() =
     Product(
-        id,
         barcode,
         name,
         previewUrl,
@@ -43,7 +41,6 @@ internal fun ProductEntity.toProduct() =
     )
 
 internal fun Product.toProductEntity() = ProductEntity(
-    id,
     barcode,
     name,
     previewUrl,

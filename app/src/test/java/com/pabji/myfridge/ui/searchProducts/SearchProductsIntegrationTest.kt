@@ -2,7 +2,6 @@ package com.pabji.myfridge.ui.searchProducts
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
@@ -55,36 +54,37 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `when init, remote random list should be shown`() {
-        localDataSource.reset()
+        localDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
+        vm.onSearch("")
         verify(uiModelObserver)
             .onChanged(UiModel.Content(mockedRemoteProductList.map { it.toItemProduct() }))
     }
 
     @Test
     fun `when empty term sended, empty list should be shown`() {
-        localDataSource.reset()
         remoteDataSource.isError = true
+        localDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("")
-        verify(uiModelObserver, times(2)).onChanged(UiModel.EmptyList)
+        verify(uiModelObserver).onChanged(UiModel.EmptyList)
     }
 
     @Test
     fun `with search term, product list should be shown`() {
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("Product")
-        verify(uiModelObserver, times(2))
+        verify(uiModelObserver)
             .onChanged(UiModel.Content(mockedFilteredProducts.map { it.toItemProduct() }))
     }
 
     @Test
     fun `with search term and remote returns error, empty product list should be shown`() {
-        localDataSource.reset()
         remoteDataSource.isError = true
+        localDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("Product")
-        verify(uiModelObserver, times(2)).onChanged(UiModel.EmptyList)
+        verify(uiModelObserver).onChanged(UiModel.EmptyList)
     }
 
     @Test
@@ -92,7 +92,7 @@ class SearchProductsIntegrationTest : AutoCloseKoinTest() {
         remoteDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         vm.onSearch("Product")
-        verify(uiModelObserver, times(2))
+        verify(uiModelObserver)
             .onChanged(UiModel.Content(mockedLocalProductList.map { it.toItemProduct() }))
     }
 }
