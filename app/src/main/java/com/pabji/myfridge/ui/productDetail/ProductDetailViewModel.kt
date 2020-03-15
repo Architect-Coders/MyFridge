@@ -51,7 +51,7 @@ class ProductDetailViewModel(
         }
     }
 
-    fun onClickButtonAdd() {
+    fun onClickButton() {
         launch {
             product?.run {
                 _model.value = when {

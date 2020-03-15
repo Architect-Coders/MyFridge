@@ -47,6 +47,7 @@ class SearchProductsViewModelTest {
         runBlocking {
             whenever(searchProductsByTerm.invoke(any())).thenReturn(emptyList())
             vm.model.observeForever(uiModelObserver)
+            vm.onSearch("")
             verify(uiModelObserver).onChanged(UiModel.EmptyList)
         }
     }
@@ -57,6 +58,7 @@ class SearchProductsViewModelTest {
             val itemProducts = mockedRemoteProductList.map { it.toItemProduct() }
             whenever(searchProductsByTerm.invoke(any())).thenReturn(mockedRemoteProductList)
             vm.model.observeForever(uiModelObserver)
+            vm.onSearch("")
             verify(uiModelObserver).onChanged(UiModel.Content(itemProducts))
         }
     }

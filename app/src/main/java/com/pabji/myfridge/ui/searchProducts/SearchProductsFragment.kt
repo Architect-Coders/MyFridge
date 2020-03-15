@@ -16,8 +16,8 @@ import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import com.pabji.myfridge.ui.searchProducts.SearchProductsViewModel.UiModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_products.*
-import org.koin.android.scope.lifecycleScope
-import org.koin.android.viewmodel.scope.viewModel
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchProductsFragment : BaseFragment() {
 
@@ -25,7 +25,7 @@ class SearchProductsFragment : BaseFragment() {
     private lateinit var searchView: SearchView
     private lateinit var adapter: ProductListAdapter
 
-    private val viewModel: SearchProductsViewModel by lifecycleScope.viewModel(this)
+    private val viewModel: SearchProductsViewModel by currentScope.viewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,6 +12,7 @@ import com.pabji.myfridge.model.toItemProduct
 import com.pabji.testshared.mockedLocalProduct
 import com.pabji.testshared.mockedProduct
 import com.pabji.usecases.GetProductDetail
+import com.pabji.usecases.RemoveProduct
 import com.pabji.usecases.SaveProduct
 import org.junit.Before
 import org.junit.Rule
@@ -43,9 +44,10 @@ class ProductDetailIntegrationTest : AutoCloseKoinTest() {
     @Before
     fun setUp() {
         val vmModule = module {
-            factory { ProductDetailViewModel(mockedItemProduct, get(), get(), get()) }
+            factory { ProductDetailViewModel(mockedItemProduct, get(), get(), get(), get()) }
             factory { GetProductDetail(get()) }
             factory { SaveProduct(get()) }
+            factory { RemoveProduct(get()) }
         }
 
         initMockedDi(vmModule)
@@ -66,7 +68,7 @@ class ProductDetailIntegrationTest : AutoCloseKoinTest() {
 
     @Test
     fun `when local product doesnt exist, remote product is shown`() {
-        localDataSource.reset()
+        localDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.FullContent(mockedProduct))
     }
@@ -80,10 +82,24 @@ class ProductDetailIntegrationTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun `when save product, product saved state is shown`() {
-        localDataSource.reset()
+    fun `when click in button, product saved state is shown`() {
         vm.model.observeForever(uiModelObserver)
-        vm.onClickButtonAdd()
-        verify(uiModelObserver).onChanged(ProductDetailViewModel.UiModel.ProductSaved(mockedProduct))
+        vm.onClickButton()
+        verify(uiModelObserver).onChanged(
+            ProductDetailViewModel.UiModel.ProductSaved(
+                mockedLocalProduct
+            )
+        )
+    }
+
+    @Test
+    fun `when click in button, product remove state is shown`() {
+        vm.model.observeForever(uiModelObserver)
+        vm.onClickButton()
+        verify(uiModelObserver).onChanged(
+            ProductDetailViewModel.UiModel.ProductRemoved(
+                mockedLocalProduct
+            )
+        )
     }
 }

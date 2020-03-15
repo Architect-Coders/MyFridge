@@ -3,12 +3,14 @@ package com.pabji.myfridge.ui.barcode
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.verify
+import com.pabji.data.datasources.LocalDatasource
 import com.pabji.data.datasources.RemoteDatasource
+import com.pabji.myfridge.FakeLocalDataSource
 import com.pabji.myfridge.FakeRemoteDataSource
 import com.pabji.myfridge.initMockedDi
 import com.pabji.myfridge.model.toItemProduct
 import com.pabji.testshared.mockedBarcodeList
-import com.pabji.testshared.mockedRemoteProductList
+import com.pabji.testshared.mockedLocalProductList
 import com.pabji.usecases.SearchProductsByBarcode
 import org.junit.Before
 import org.junit.Rule
@@ -33,6 +35,8 @@ class BarcodeReaderIntegrationTest : AutoCloseKoinTest() {
 
     private lateinit var remoteDataSource: FakeRemoteDataSource
 
+    private lateinit var localDataSource: FakeLocalDataSource
+
     @Before
     fun setUp() {
         val vmModule = module {
@@ -42,6 +46,7 @@ class BarcodeReaderIntegrationTest : AutoCloseKoinTest() {
 
         initMockedDi(vmModule)
         remoteDataSource = get<RemoteDatasource>() as FakeRemoteDataSource
+        localDataSource = get<LocalDatasource>() as FakeLocalDataSource
         vm = get()
     }
 
@@ -50,13 +55,14 @@ class BarcodeReaderIntegrationTest : AutoCloseKoinTest() {
         vm.model.observeForever(uiModelObserver)
         vm.onBarcodeDetected(mockedBarcodeList)
         verify(uiModelObserver).onChanged(
-            BarcodeReaderViewModel.UiModel.Content(mockedRemoteProductList.map { it.toItemProduct() })
+            BarcodeReaderViewModel.UiModel.Content(mockedLocalProductList.map { it.toItemProduct() })
         )
     }
 
     @Test
     fun `when barcode list detected, error is shown`() {
         remoteDataSource.isError = true
+        localDataSource.isError = true
         vm.model.observeForever(uiModelObserver)
         vm.onBarcodeDetected(mockedBarcodeList)
         verify(uiModelObserver).onChanged(

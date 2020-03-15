@@ -88,6 +88,8 @@ class UITest : KoinTest {
             )
         )
 
+        onView(withId(R.id.btn_add)).perform(click())
+
         onView(isRoot()).perform(pressBack())
 
         onView(withId(R.id.fab)).perform(click())
