@@ -22,7 +22,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCallback {
 
     private val cameraPermissionRequester = PermissionRequester(this, Manifest.permission.CAMERA)
-    private lateinit var adapter: ProductListAdapter
+    private lateinit var listAdapter: ProductListAdapter
 
     private val viewModel: BarcodeReaderViewModel by currentScope.viewModel(this)
 
@@ -56,7 +56,7 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
                 ProductListAdapter { product ->
                     viewModel.onProductClicked(product)
                 }.apply {
-                    adapter = this
+                    listAdapter = this
                 }
             it.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, true)
         }
@@ -73,7 +73,7 @@ class BarcodeReaderActivity : AppCompatActivity(), OnRequestPermissionsResultCal
 
     private fun setProductList(list: List<ItemProduct>) {
         rv_product_list.visible()
-        adapter.productList = list
+        listAdapter.productList = list
     }
 
     override fun onResume() {
