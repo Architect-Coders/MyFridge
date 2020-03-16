@@ -3,19 +3,29 @@ package com.pabji.myfridge.ui.searchProducts
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.core.internal.view.SupportMenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pabji.myfridge.R
 import com.pabji.myfridge.ui.common.BaseFragment
 import com.pabji.myfridge.ui.common.adapters.ProductListAdapter
-import com.pabji.myfridge.ui.common.extensions.*
+import com.pabji.myfridge.ui.common.extensions.gone
+import com.pabji.myfridge.ui.common.extensions.onTextChange
+import com.pabji.myfridge.ui.common.extensions.setVisible
+import com.pabji.myfridge.ui.common.extensions.startActivity
+import com.pabji.myfridge.ui.common.extensions.visible
 import com.pabji.myfridge.ui.productDetail.ProductDetailActivity
 import com.pabji.myfridge.ui.searchProducts.SearchProductsViewModel.UiModel
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_search_products.*
+import kotlinx.android.synthetic.main.activity_main.bottom_navigation
+import kotlinx.android.synthetic.main.fragment_search_products.progress_bar
+import kotlinx.android.synthetic.main.fragment_search_products.rv_product_list
+import kotlinx.android.synthetic.main.fragment_search_products.tv_emptyList
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -38,9 +48,7 @@ class SearchProductsFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_search_products, container, false)
     }
@@ -69,7 +77,7 @@ class SearchProductsFragment : BaseFragment() {
         inflater.inflate(R.menu.main_toolbar_menu, menu)
 
         val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE) as? SearchManager
-        val searchMenuItem = menu.findItem(R.id.action_toolbar_search) as SupportMenuItem
+        val searchMenuItem = menu.findItem(R.id.action_toolbar_search) as MenuItem
         searchView = (searchMenuItem.actionView as SearchView).apply {
             setSearchableInfo(searchManager?.getSearchableInfo(activity?.componentName))
             setOnQueryTextFocusChangeListener { _, isVisible ->
